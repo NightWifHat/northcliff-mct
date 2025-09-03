@@ -1,64 +1,89 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import Card from '../components/Card'
 import Modal from '../components/Modal'
 
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState(null)
   
+  // TODO: Replace with actual facility images
   const images = [
     {
       id: 1,
-      src: 'https://via.placeholder.com/300x200/14b8a6/ffffff?text=Mediation+Room+1',
+      src: 'https://via.placeholder.com/600x400/14b8a6/ffffff?text=Mediation+Room+1',
       title: 'Main Mediation Room',
-      description: 'Our largest mediation space with natural lighting'
+      description: 'Our largest mediation space with natural lighting and comfortable seating for up to 8 people'
     },
     {
       id: 2,
-      src: 'https://via.placeholder.com/300x200/059669/ffffff?text=Training+Hall',
+      src: 'https://via.placeholder.com/600x400/059669/ffffff?text=Training+Hall',
       title: 'Training Hall',
-      description: 'Modern training facility for up to 30 people'
+      description: 'Modern training facility accommodating up to 30 people with state-of-the-art AV equipment'
     },
     {
       id: 3,
-      src: 'https://via.placeholder.com/300x200/0d9488/ffffff?text=Consultation+Room',
+      src: 'https://via.placeholder.com/600x400/0d9488/ffffff?text=Consultation+Room',
       title: 'Private Consultation Room',
-      description: 'Intimate space for confidential meetings'
+      description: 'Intimate space for confidential one-on-one meetings and consultations'
     },
     {
       id: 4,
-      src: 'https://via.placeholder.com/300x200/0f766e/ffffff?text=Reception+Area',
+      src: 'https://via.placeholder.com/600x400/0f766e/ffffff?text=Reception+Area',
       title: 'Reception Area',
-      description: 'Welcoming entrance with comfortable seating'
+      description: 'Professional welcoming entrance with comfortable seating and reception services'
     },
     {
       id: 5,
-      src: 'https://via.placeholder.com/300x200/134e4a/ffffff?text=Conference+Room',
+      src: 'https://via.placeholder.com/600x400/134e4a/ffffff?text=Conference+Room',
       title: 'Conference Room',
-      description: 'Professional meeting space with AV equipment'
+      description: 'Executive boardroom-style setup with modern presentation facilities'
     },
     {
       id: 6,
-      src: 'https://via.placeholder.com/300x200/14b8a6/ffffff?text=Breakout+Area',
+      src: 'https://via.placeholder.com/600x400/14b8a6/ffffff?text=Breakout+Area',
       title: 'Breakout Area',
-      description: 'Relaxed space for informal discussions'
+      description: 'Relaxed space for informal discussions and networking during breaks'
     },
     {
       id: 7,
-      src: 'https://via.placeholder.com/300x200/059669/ffffff?text=Mediation+Room+2',
+      src: 'https://via.placeholder.com/600x400/059669/ffffff?text=Mediation+Room+2',
       title: 'Secondary Mediation Room',
-      description: 'Smaller mediation space for intimate sessions'
+      description: 'Smaller mediation space perfect for intimate sessions and family disputes'
     },
     {
       id: 8,
-      src: 'https://via.placeholder.com/300x200/0d9488/ffffff?text=Kitchen+Area',
-      title: 'Kitchen Facilities',
-      description: 'Fully equipped kitchen for catering needs'
+      src: 'https://via.placeholder.com/600x400/0d9488/ffffff?text=Kitchen+Area',
+      title: 'Kitchen & Refreshment Area',
+      description: 'Fully equipped kitchen area for catering services and refreshments'
     },
     {
       id: 9,
-      src: 'https://via.placeholder.com/300x200/0f766e/ffffff?text=Parking+Area',
-      title: 'Parking Area',
-      description: 'Secure on-site parking for all visitors'
+      src: 'https://via.placeholder.com/600x400/0f766e/ffffff?text=Parking+Area',
+      title: 'Secure Parking',
+      description: 'Safe and secure parking facilities available for all clients and visitors'
+    }
+  ]
+
+  const facilities = [
+    {
+      title: 'Modern Technology',
+      description: 'All rooms equipped with the latest audio-visual technology',
+      icon: '💻'
+    },
+    {
+      title: 'Comfortable Environment',
+      description: 'Climate-controlled spaces with ergonomic furniture',
+      icon: '🪑'
+    },
+    {
+      title: 'Professional Setting',
+      description: 'Designed to create the perfect atmosphere for productive meetings',
+      icon: '🏢'
+    },
+    {
+      title: 'Refreshment Services',
+      description: 'Coffee, tea, and light refreshments available',
+      icon: '☕'
     }
   ]
 
@@ -68,6 +93,18 @@ const Gallery = () => {
 
   const closeModal = () => {
     setSelectedImage(null)
+  }
+
+  const nextImage = () => {
+    const currentIndex = images.findIndex(img => img.id === selectedImage.id)
+    const nextIndex = (currentIndex + 1) % images.length
+    setSelectedImage(images[nextIndex])
+  }
+
+  const prevImage = () => {
+    const currentIndex = images.findIndex(img => img.id === selectedImage.id)
+    const prevIndex = (currentIndex - 1 + images.length) % images.length
+    setSelectedImage(images[prevIndex])
   }
 
   return (
@@ -230,18 +267,47 @@ const Gallery = () => {
       {/* Modal for Image Preview */}
       <Modal isOpen={selectedImage !== null} onClose={closeModal}>
         {selectedImage && (
-          <div>
+          <div className="relative">
             <img
               src={selectedImage.src}
               alt={selectedImage.title}
-              className="w-full h-auto rounded-lg mb-4"
+              className="w-full max-h-96 object-contain rounded-lg mb-4"
             />
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              {selectedImage.title}
-            </h3>
-            <p className="text-gray-600">
-              {selectedImage.description}
-            </p>
+            <div className="mb-4">
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                {selectedImage.title}
+              </h3>
+              <p className="text-gray-600">
+                {selectedImage.description}
+              </p>
+            </div>
+            
+            {/* Navigation buttons */}
+            <div className="flex justify-between items-center pt-4 border-t border-gray-200">
+              <button
+                onClick={prevImage}
+                className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Previous
+              </button>
+              
+              <span className="text-sm text-gray-500">
+                {images.findIndex(img => img.id === selectedImage.id) + 1} of {images.length}
+              </span>
+              
+              <button
+                onClick={nextImage}
+                className="flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                Next
+                <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
           </div>
         )}
       </Modal>

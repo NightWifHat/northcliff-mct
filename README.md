@@ -106,13 +106,23 @@ src/
 
 ### Booking Page
 - Comprehensive booking form with validation
-- Service selection and time slots
+- **Interactive booking calendar with color-coded availability**
+  - Red: Booked
+  - Yellow: Reserved  
+  - Green: Available
+- Service selection and time slots with pricing calculation
+- **PayPal sandbox integration for payments**
 - Contact information sidebar
 
 ### Contact Page
 - Contact form with validation
-- Contact information display
-- Placeholder for Google Maps integration
+- **Three professional contacts with placeholder logos**
+  - Victor de Bruyn (Marketing Manager) - Lindsay Keller
+  - Lize-Marié Joubert (Operations Manager) - JW Law  
+  - Kippie Schroeder (Partner) - Werth Schroeder
+- **Complete address**: 2nd Floor, Impala Center, 177 Beyers Naudé Drive, Northcliff
+- **Embedded Google Maps integration** showing Northcliff, Johannesburg
+- Contact information display in styled card layout
 
 ## Customization
 

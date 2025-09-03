@@ -1,26 +1,39 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Card from '../components/Card'
+import BookingCalendar from '../components/BookingCalendar'
+import PayPalCheckout from '../components/PayPalCheckout'
 
 const Booking = () => {
+  const [selectedDate, setSelectedDate] = useState(null)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    date: '',
     time: '',
     serviceType: '',
+    duration: '',
     message: ''
   })
 
+  const [showPayment, setShowPayment] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState({})
 
   const serviceTypes = [
-    { value: '', label: 'Select a service...' },
-    { value: 'mediation', label: 'Mediation Room' },
-    { value: 'training', label: 'Training Facility' },
-    { value: 'consultation', label: 'Consultation Support' }
+    { value: '', label: 'Select a service...', price: 0 },
+    { value: 'mediation', label: 'Mediation Room', price: 250 },
+    { value: 'training', label: 'Training Facility', price: 400 },
+    { value: 'consultation', label: 'Consultation Support', price: 180 }
+  ]
+
+  const durations = [
+    { value: '', label: 'Select duration...', multiplier: 0 },
+    { value: '1hour', label: '1 Hour', multiplier: 1 },
+    { value: '2hours', label: '2 Hours', multiplier: 2 },
+    { value: '3hours', label: '3 Hours', multiplier: 3 },
+    { value: '4hours', label: '4 Hours (Half Day)', multiplier: 3.6 },
+    { value: '8hours', label: '8 Hours (Full Day)', multiplier: 6 }
   ]
 
   const timeSlots = [
@@ -37,6 +50,18 @@ const Booking = () => {
     { value: '17:00', label: '05:00 PM' }
   ]
 
+  // Calculate total amount based on service type and duration
+  const calculateAmount = () => {
+    const service = serviceTypes.find(s => s.value === formData.serviceType)
+    const duration = durations.find(d => d.value === formData.duration)
+    
+    if (!service || !duration || !service.price || !duration.multiplier) {
+      return 0
+    }
+    
+    return service.price * duration.multiplier
+  }
+
   const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({
@@ -48,6 +73,16 @@ const Booking = () => {
       setErrors(prev => ({
         ...prev,
         [name]: ''
+      }))
+    }
+  }
+
+  const handleDateSelect = (date) => {
+    setSelectedDate(date)
+    if (errors.date) {
+      setErrors(prev => ({
+        ...prev,
+        date: ''
       }))
     }
   }
@@ -69,7 +104,7 @@ const Booking = () => {
       newErrors.phone = 'Phone number is required'
     }
 
-    if (!formData.date) {
+    if (!selectedDate) {
       newErrors.date = 'Date is required'
     }
 
@@ -79,6 +114,10 @@ const Booking = () => {
 
     if (!formData.serviceType) {
       newErrors.serviceType = 'Service type is required'
+    }
+
+    if (!formData.duration) {
+      newErrors.duration = 'Duration is required'
     }
 
     return newErrors
@@ -95,25 +134,79 @@ const Booking = () => {
 
     setIsSubmitting(true)
     
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    // For now, just log the form data
-    console.log('Form submission:', formData)
+    try {
+      // TODO: Send booking data to backend API
+      const bookingData = {
+        ...formData,
+        date: selectedDate?.toISOString().split('T')[0],
+        amount: calculateAmount()
+      }
+      
+      console.log('Booking request:', bookingData)
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      // Show payment form
+      setShowPayment(true)
+      
+    } catch (error) {
+      console.error('Booking error:', error)
+      alert('There was an error processing your booking. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handlePaymentSuccess = (paymentDetails) => {
+    // TODO: Send payment confirmation to backend
+    console.log('Payment successful:', paymentDetails)
+    alert('Booking confirmed! You will receive a confirmation email shortly.')
     
     // Reset form
     setFormData({
       name: '',
       email: '',
       phone: '',
-      date: '',
       time: '',
       serviceType: '',
+      duration: '',
       message: ''
     })
+    setSelectedDate(null)
+    setShowPayment(false)
+  }
+
+  const handlePaymentError = (error) => {
+    console.error('Payment error:', error)
+    alert('Payment failed. Please try again or contact us for assistance.')
+    setShowPayment(false)
+  }
+
+  const formatDate = (date) => {
+    if (!date) return ''
+    return date.toLocaleDateString('en-GB', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  }
+
+  const getBookingDetails = () => {
+    const service = serviceTypes.find(s => s.value === formData.serviceType)
+    const duration = durations.find(d => d.value === formData.duration)
     
-    setIsSubmitting(false)
-    alert('Thank you for your booking request! We will contact you shortly to confirm your reservation.')
+    return {
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      date: formatDate(selectedDate),
+      time: formData.time,
+      serviceType: service?.label || '',
+      duration: duration?.label || '',
+      message: formData.message
+    }
   }
 
   return (
@@ -140,229 +233,296 @@ const Booking = () => {
 
       {/* Booking Form Section */}
       <section className="py-20 bg-light-gray">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Form */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              className="lg:col-span-2"
-            >
-              <Card>
-                <h2 className="text-3xl font-bold text-gray-900 mb-6">
-                  Booking Request Form
-                </h2>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                        Full Name *
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-teal focus:border-primary-teal outline-none transition-colors ${
-                          errors.name ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                        placeholder="Enter your full name"
-                      />
-                      {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {!showPayment ? (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+              {/* Calendar */}
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8 }}
+                className="lg:col-span-1"
+              >
+                <BookingCalendar 
+                  onDateSelect={handleDateSelect} 
+                  selectedDate={selectedDate}
+                />
+              </motion.div>
+
+              {/* Booking Form */}
+              <motion.div
+                initial={{ opacity: 0, x: 30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="lg:col-span-2"
+              >
+                <Card>
+                  <h2 className="text-3xl font-bold text-gray-900 mb-6">
+                    Booking Details
+                  </h2>
+                  
+                  {selectedDate && (
+                    <div className="mb-6 p-4 bg-primary-teal bg-opacity-10 rounded-lg">
+                      <p className="text-primary-teal font-semibold">
+                        Selected Date: {formatDate(selectedDate)}
+                      </p>
+                    </div>
+                  )}
+
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                          Full Name *
+                        </label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleInputChange}
+                          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-teal focus:border-primary-teal outline-none transition-colors ${
+                            errors.name ? 'border-red-500' : 'border-gray-300'
+                          }`}
+                          placeholder="Enter your full name"
+                        />
+                        {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                      </div>
+
+                      <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                          Email Address *
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-teal focus:border-primary-teal outline-none transition-colors ${
+                            errors.email ? 'border-red-500' : 'border-gray-300'
+                          }`}
+                          placeholder="Enter your email address"
+                        />
+                        {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                      </div>
                     </div>
 
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                        Email Address *
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                        Phone Number *
                       </label>
                       <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
                         onChange={handleInputChange}
                         className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-teal focus:border-primary-teal outline-none transition-colors ${
-                          errors.email ? 'border-red-500' : 'border-gray-300'
+                          errors.phone ? 'border-red-500' : 'border-gray-300'
                         }`}
-                        placeholder="Enter your email address"
+                        placeholder="Enter your phone number"
                       />
-                      {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                      Phone Number *
-                    </label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-teal focus:border-primary-teal outline-none transition-colors ${
-                        errors.phone ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                      placeholder="Enter your phone number"
-                    />
-                    {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-2">
-                        Preferred Date *
-                      </label>
-                      <input
-                        type="date"
-                        id="date"
-                        name="date"
-                        value={formData.date}
-                        onChange={handleInputChange}
-                        min={new Date().toISOString().split('T')[0]}
-                        className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-teal focus:border-primary-teal outline-none transition-colors ${
-                          errors.date ? 'border-red-500' : 'border-gray-300'
-                        }`}
-                      />
-                      {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date}</p>}
+                      {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
                     </div>
 
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-2">
+                          Preferred Time *
+                        </label>
+                        <select
+                          id="time"
+                          name="time"
+                          value={formData.time}
+                          onChange={handleInputChange}
+                          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-teal focus:border-primary-teal outline-none transition-colors ${
+                            errors.time ? 'border-red-500' : 'border-gray-300'
+                          }`}
+                        >
+                          {timeSlots.map(slot => (
+                            <option key={slot.value} value={slot.value}>
+                              {slot.label}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.time && <p className="text-red-500 text-sm mt-1">{errors.time}</p>}
+                      </div>
+
+                      <div>
+                        <label htmlFor="serviceType" className="block text-sm font-medium text-gray-700 mb-2">
+                          Service Type *
+                        </label>
+                        <select
+                          id="serviceType"
+                          name="serviceType"
+                          value={formData.serviceType}
+                          onChange={handleInputChange}
+                          className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-teal focus:border-primary-teal outline-none transition-colors ${
+                            errors.serviceType ? 'border-red-500' : 'border-gray-300'
+                          }`}
+                        >
+                          {serviceTypes.map(service => (
+                            <option key={service.value} value={service.value}>
+                              {service.label}
+                            </option>
+                          ))}
+                        </select>
+                        {errors.serviceType && <p className="text-red-500 text-sm mt-1">{errors.serviceType}</p>}
+                      </div>
+                    </div>
+
                     <div>
-                      <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-2">
-                        Preferred Time *
+                      <label htmlFor="duration" className="block text-sm font-medium text-gray-700 mb-2">
+                        Duration *
                       </label>
                       <select
-                        id="time"
-                        name="time"
-                        value={formData.time}
+                        id="duration"
+                        name="duration"
+                        value={formData.duration}
                         onChange={handleInputChange}
                         className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-teal focus:border-primary-teal outline-none transition-colors ${
-                          errors.time ? 'border-red-500' : 'border-gray-300'
+                          errors.duration ? 'border-red-500' : 'border-gray-300'
                         }`}
                       >
-                        {timeSlots.map(slot => (
-                          <option key={slot.value} value={slot.value}>
-                            {slot.label}
+                        {durations.map(duration => (
+                          <option key={duration.value} value={duration.value}>
+                            {duration.label}
                           </option>
                         ))}
                       </select>
-                      {errors.time && <p className="text-red-500 text-sm mt-1">{errors.time}</p>}
+                      {errors.duration && <p className="text-red-500 text-sm mt-1">{errors.duration}</p>}
                     </div>
-                  </div>
 
-                  <div>
-                    <label htmlFor="serviceType" className="block text-sm font-medium text-gray-700 mb-2">
-                      Service Type *
-                    </label>
-                    <select
-                      id="serviceType"
-                      name="serviceType"
-                      value={formData.serviceType}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-teal focus:border-primary-teal outline-none transition-colors ${
-                        errors.serviceType ? 'border-red-500' : 'border-gray-300'
+                    {calculateAmount() > 0 && (
+                      <div className="p-4 bg-green-50 rounded-lg">
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-700 font-medium">Estimated Total:</span>
+                          <span className="text-2xl font-bold text-primary-teal">R{calculateAmount().toFixed(2)}</span>
+                        </div>
+                      </div>
+                    )}
+
+                    <div>
+                      <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                        Additional Message
+                      </label>
+                      <textarea
+                        id="message"
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        rows="4"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-teal focus:border-primary-teal outline-none transition-colors"
+                        placeholder="Any additional information or special requirements..."
+                      ></textarea>
+                    </div>
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting || !selectedDate}
+                      className={`w-full py-4 px-6 rounded-lg font-semibold text-white transition-all duration-300 ${
+                        isSubmitting || !selectedDate
+                          ? 'bg-gray-400 cursor-not-allowed'
+                          : 'btn-primary'
                       }`}
                     >
-                      {serviceTypes.map(service => (
-                        <option key={service.value} value={service.value}>
-                          {service.label}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.serviceType && <p className="text-red-500 text-sm mt-1">{errors.serviceType}</p>}
-                  </div>
+                      {isSubmitting ? 'Processing...' : 'Proceed to Payment'}
+                    </button>
 
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                      Additional Message
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      rows="4"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-teal focus:border-primary-teal outline-none transition-colors"
-                      placeholder="Any additional information or special requirements..."
-                    ></textarea>
-                  </div>
-
+                    {!selectedDate && (
+                      <p className="text-sm text-gray-500 text-center">
+                        Please select a date from the calendar to continue
+                      </p>
+                    )}
+                  </form>
+                </Card>
+              </motion.div>
+            </div>
+          ) : (
+            /* Payment Section */
+            <div className="max-w-2xl mx-auto">
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+              >
+                <PayPalCheckout 
+                  amount={calculateAmount()}
+                  bookingDetails={getBookingDetails()}
+                  onPaymentSuccess={handlePaymentSuccess}
+                  onPaymentError={handlePaymentError}
+                />
+                
+                <div className="mt-6 text-center">
                   <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className={`w-full py-4 px-6 rounded-lg font-semibold text-white transition-all duration-300 ${
-                      isSubmitting
-                        ? 'bg-gray-400 cursor-not-allowed'
-                        : 'btn-primary'
-                    }`}
+                    onClick={() => setShowPayment(false)}
+                    className="text-primary-teal hover:text-primary-green transition-colors"
                   >
-                    {isSubmitting ? 'Submitting...' : 'Submit Booking Request'}
+                    ← Back to Booking Details
                   </button>
-                </form>
-              </Card>
-            </motion.div>
-
-            {/* Sidebar */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="space-y-8"
-            >
-              <Card>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  Quick Pricing Guide
-                </h3>
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="font-medium text-gray-900">Mediation Room</h4>
-                    <p className="text-sm text-gray-600">From R250/hour</p>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900">Training Facility</h4>
-                    <p className="text-sm text-gray-600">From R400/hour</p>
-                  </div>
-                  <div>
-                    <h4 className="font-medium text-gray-900">Consultation Room</h4>
-                    <p className="text-sm text-gray-600">From R180/hour</p>
-                  </div>
                 </div>
-              </Card>
+              </motion.div>
+            </div>
+          )}
+        </div>
+      </section>
 
-              <Card>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  Contact Information
-                </h3>
-                <div className="space-y-3">
-                  <div className="flex items-center">
-                    <span className="text-primary-teal mr-2">📧</span>
-                    <span className="text-sm">info@northcliffmct.co.za</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="text-primary-teal mr-2">📞</span>
-                    <span className="text-sm">+27 11 123 4567</span>
-                  </div>
-                  <div className="flex items-center">
-                    <span className="text-primary-teal mr-2">🕐</span>
-                    <span className="text-sm">Mon-Fri: 8AM-6PM</span>
-                  </div>
+      {/* Sidebar Information */}
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                Service Pricing
+              </h3>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Mediation Room</span>
+                  <span className="font-semibold">R250/hour</span>
                 </div>
-              </Card>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Training Facility</span>
+                  <span className="font-semibold">R400/hour</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Consultation Room</span>
+                  <span className="font-semibold">R180/hour</span>
+                </div>
+              </div>
+            </Card>
 
-              <Card>
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  Booking Policy
-                </h3>
-                <ul className="text-sm text-gray-600 space-y-2">
-                  <li>• 24-hour confirmation</li>
-                  <li>• Cancellation 48hrs prior</li>
-                  <li>• Deposit required for full-day bookings</li>
-                  <li>• All facilities include basic refreshments</li>
-                </ul>
-              </Card>
-            </motion.div>
+            <Card>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                Contact Information
+              </h3>
+              <div className="space-y-3 text-sm">
+                <div className="flex items-center">
+                  <span className="text-primary-teal mr-2">📧</span>
+                  <span>info@northcliffmct.co.za</span>
+                </div>
+                <div className="flex items-center">
+                  <span className="text-primary-teal mr-2">📞</span>
+                  <span>+27 11 123 4567</span>
+                </div>
+                <div className="flex items-center">
+                  <span className="text-primary-teal mr-2">🕐</span>
+                  <span>Mon-Fri: 8AM-6PM</span>
+                </div>
+              </div>
+            </Card>
+
+            <Card>
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                Booking Policy
+              </h3>
+              <ul className="text-sm text-gray-600 space-y-2">
+                <li>• Confirmation within 24 hours</li>
+                <li>• Cancellation 48hrs prior</li>
+                <li>• Secure online payments</li>
+                <li>• Refreshments included</li>
+              </ul>
+            </Card>
           </div>
         </div>
       </section>

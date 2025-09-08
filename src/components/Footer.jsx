@@ -19,6 +19,7 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <h3 className="text-2xl font-bold text-primary-teal mb-4">
+              {/* TODO: Replace with actual logo when provided */}
               Northcliff MCT
             </h3>
             <p className="text-gray-300 mb-4">

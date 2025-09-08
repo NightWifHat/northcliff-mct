@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import Card from '../components/Card'
 import BookingCalendar from '../components/BookingCalendar'
 import PayPalCheckout from '../components/PayPalCheckout'
+import { supabase } from '../supabaseClient'
 
 const Booking = () => {
   const [selectedDate, setSelectedDate] = useState(null)
@@ -11,7 +12,7 @@ const Booking = () => {
     email: '',
     phone: '',
     time: '',
-    serviceType: '',
+    packageType: '',
     duration: '',
     message: ''
   })
@@ -20,20 +21,17 @@ const Booking = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState({})
 
-  const serviceTypes = [
-    { value: '', label: 'Select a service...', price: 0 },
-    { value: 'mediation', label: 'Mediation Room', price: 250 },
-    { value: 'training', label: 'Training Facility', price: 400 },
-    { value: 'consultation', label: 'Consultation Support', price: 180 }
+  const packageTypes = [
+    { value: '', label: 'Select a package...', price: 0 },
+    { value: 'full-day-entire', label: 'Full Day – Entire Facility', fullDayPrice: 4000, halfDayPrice: null },
+    { value: 'half-day-entire', label: 'Half Day – Entire Facility', fullDayPrice: null, halfDayPrice: 2000 },
+    { value: 'big-room-only', label: 'Big Room Only', fullDayPrice: 2000, halfDayPrice: 1500 }
   ]
 
   const durations = [
-    { value: '', label: 'Select duration...', multiplier: 0 },
-    { value: '1hour', label: '1 Hour', multiplier: 1 },
-    { value: '2hours', label: '2 Hours', multiplier: 2 },
-    { value: '3hours', label: '3 Hours', multiplier: 3 },
-    { value: '4hours', label: '4 Hours (Half Day)', multiplier: 3.6 },
-    { value: '8hours', label: '8 Hours (Full Day)', multiplier: 6 }
+    { value: '', label: 'Select duration...' },
+    { value: 'half-day', label: 'Half Day' },
+    { value: 'full-day', label: 'Full Day' }
   ]
 
   const timeSlots = [
@@ -50,16 +48,38 @@ const Booking = () => {
     { value: '17:00', label: '05:00 PM' }
   ]
 
-  // Calculate total amount based on service type and duration
+  // Calculate total amount based on package type and duration
   const calculateAmount = () => {
-    const service = serviceTypes.find(s => s.value === formData.serviceType)
-    const duration = durations.find(d => d.value === formData.duration)
+    const packageType = packageTypes.find(p => p.value === formData.packageType)
+    const duration = formData.duration
     
-    if (!service || !duration || !service.price || !duration.multiplier) {
+    if (!packageType || !duration) {
       return 0
     }
     
-    return service.price * duration.multiplier
+    if (duration === 'full-day' && packageType.fullDayPrice) {
+      return packageType.fullDayPrice
+    } else if (duration === 'half-day' && packageType.halfDayPrice) {
+      return packageType.halfDayPrice
+    }
+    
+    return 0
+  }
+
+  // Check if selected package supports selected duration
+  const isDurationValid = () => {
+    const packageType = packageTypes.find(p => p.value === formData.packageType)
+    const duration = formData.duration
+    
+    if (!packageType || !duration) return true
+    
+    if (duration === 'full-day') {
+      return packageType.fullDayPrice !== null
+    } else if (duration === 'half-day') {
+      return packageType.halfDayPrice !== null
+    }
+    
+    return false
   }
 
   const handleInputChange = (e) => {
@@ -112,12 +132,16 @@ const Booking = () => {
       newErrors.time = 'Time is required'
     }
 
-    if (!formData.serviceType) {
-      newErrors.serviceType = 'Service type is required'
+    if (!formData.packageType) {
+      newErrors.packageType = 'Package type is required'
     }
 
     if (!formData.duration) {
       newErrors.duration = 'Duration is required'
+    }
+
+    if (formData.packageType && formData.duration && !isDurationValid()) {
+      newErrors.duration = 'Selected duration is not available for this package'
     }
 
     return newErrors
@@ -135,17 +159,24 @@ const Booking = () => {
     setIsSubmitting(true)
     
     try {
-      // TODO: Send booking data to backend API
-      const bookingData = {
-        ...formData,
-        date: selectedDate?.toISOString().split('T')[0],
-        amount: calculateAmount()
+      // Check if date is already booked
+      const selectedDateString = selectedDate?.toISOString().split('T')[0]
+      const { data: existingBookings, error: checkError } = await supabase
+        .from('bookings')
+        .select('*')
+        .eq('booking_date', selectedDateString)
+        .in('status', ['booked', 'reserved'])
+
+      if (checkError) {
+        console.error('Error checking existing bookings:', checkError)
+        throw new Error('Failed to check availability')
       }
-      
-      console.log('Booking request:', bookingData)
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
+
+      if (existingBookings && existingBookings.length > 0) {
+        alert('This date is no longer available. Please select another date.')
+        setIsSubmitting(false)
+        return
+      }
       
       // Show payment form
       setShowPayment(true)
@@ -158,23 +189,55 @@ const Booking = () => {
     }
   }
 
-  const handlePaymentSuccess = (paymentDetails) => {
-    // TODO: Send payment confirmation to backend
-    console.log('Payment successful:', paymentDetails)
-    alert('Booking confirmed! You will receive a confirmation email shortly.')
-    
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      time: '',
-      serviceType: '',
-      duration: '',
-      message: ''
-    })
-    setSelectedDate(null)
-    setShowPayment(false)
+  const handlePaymentSuccess = async (paymentDetails) => {
+    try {
+      // Save booking to Supabase after successful payment
+      const packageType = packageTypes.find(p => p.value === formData.packageType)
+      const bookingData = {
+        booking_date: selectedDate?.toISOString().split('T')[0],
+        status: 'booked',
+        package_type: packageType?.label || formData.packageType,
+        price: calculateAmount(),
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        notes: formData.message,
+        time: formData.time,
+        duration: formData.duration,
+        payment_id: paymentDetails.id,
+        created_at: new Date().toISOString()
+      }
+
+      const { data, error } = await supabase
+        .from('bookings')
+        .insert([bookingData])
+
+      if (error) {
+        console.error('Error saving booking:', error)
+        alert('Payment successful but there was an error saving your booking. Please contact us with your payment ID: ' + paymentDetails.id)
+        return
+      }
+
+      console.log('Booking saved successfully:', data)
+      alert('Booking confirmed! You will receive a confirmation email shortly.')
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        time: '',
+        packageType: '',
+        duration: '',
+        message: ''
+      })
+      setSelectedDate(null)
+      setShowPayment(false)
+      
+    } catch (error) {
+      console.error('Error processing booking:', error)
+      alert('Payment successful but there was an error saving your booking. Please contact us with your payment ID: ' + paymentDetails.id)
+    }
   }
 
   const handlePaymentError = (error) => {
@@ -194,7 +257,7 @@ const Booking = () => {
   }
 
   const getBookingDetails = () => {
-    const service = serviceTypes.find(s => s.value === formData.serviceType)
+    const packageType = packageTypes.find(p => p.value === formData.packageType)
     const duration = durations.find(d => d.value === formData.duration)
     
     return {
@@ -203,7 +266,7 @@ const Booking = () => {
       phone: formData.phone,
       date: formatDate(selectedDate),
       time: formData.time,
-      serviceType: service?.label || '',
+      packageType: packageType?.label || '',
       duration: duration?.label || '',
       message: formData.message
     }
@@ -350,25 +413,25 @@ const Booking = () => {
                       </div>
 
                       <div>
-                        <label htmlFor="serviceType" className="block text-sm font-medium text-gray-700 mb-2">
-                          Service Type *
+                        <label htmlFor="packageType" className="block text-sm font-medium text-gray-700 mb-2">
+                          Package Type *
                         </label>
                         <select
-                          id="serviceType"
-                          name="serviceType"
-                          value={formData.serviceType}
+                          id="packageType"
+                          name="packageType"
+                          value={formData.packageType}
                           onChange={handleInputChange}
                           className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-teal focus:border-primary-teal outline-none transition-colors ${
-                            errors.serviceType ? 'border-red-500' : 'border-gray-300'
+                            errors.packageType ? 'border-red-500' : 'border-gray-300'
                           }`}
                         >
-                          {serviceTypes.map(service => (
-                            <option key={service.value} value={service.value}>
-                              {service.label}
+                          {packageTypes.map(packageType => (
+                            <option key={packageType.value} value={packageType.value}>
+                              {packageType.label}
                             </option>
                           ))}
                         </select>
-                        {errors.serviceType && <p className="text-red-500 text-sm mt-1">{errors.serviceType}</p>}
+                        {errors.packageType && <p className="text-red-500 text-sm mt-1">{errors.packageType}</p>}
                       </div>
                     </div>
 
@@ -384,14 +447,26 @@ const Booking = () => {
                         className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-primary-teal focus:border-primary-teal outline-none transition-colors ${
                           errors.duration ? 'border-red-500' : 'border-gray-300'
                         }`}
+                        disabled={!formData.packageType}
                       >
-                        {durations.map(duration => (
-                          <option key={duration.value} value={duration.value}>
-                            {duration.label}
-                          </option>
-                        ))}
+                        {durations.map(duration => {
+                          const packageType = packageTypes.find(p => p.value === formData.packageType)
+                          const isAvailable = !packageType || 
+                            (duration.value === 'full-day' && packageType.fullDayPrice !== null) ||
+                            (duration.value === 'half-day' && packageType.halfDayPrice !== null) ||
+                            duration.value === ''
+                          
+                          return (
+                            <option key={duration.value} value={duration.value} disabled={!isAvailable}>
+                              {duration.label} {!isAvailable ? '(Not Available)' : ''}
+                            </option>
+                          )
+                        })}
                       </select>
                       {errors.duration && <p className="text-red-500 text-sm mt-1">{errors.duration}</p>}
+                      {!formData.packageType && (
+                        <p className="text-sm text-gray-500 mt-1">Please select a package type first</p>
+                      )}
                     </div>
 
                     {calculateAmount() > 0 && (
@@ -474,20 +549,20 @@ const Booking = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card>
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                Service Pricing
+                Package Pricing
               </h3>
               <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Mediation Room</span>
-                  <span className="font-semibold">R250/hour</span>
+                <div className="border-b pb-2">
+                  <div className="font-medium text-gray-900">Full Day – Entire Facility</div>
+                  <div className="text-sm text-gray-600">R4,000/day</div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Training Facility</span>
-                  <span className="font-semibold">R400/hour</span>
+                <div className="border-b pb-2">
+                  <div className="font-medium text-gray-900">Half Day – Entire Facility</div>
+                  <div className="text-sm text-gray-600">R2,000/half day</div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Consultation Room</span>
-                  <span className="font-semibold">R180/hour</span>
+                <div className="border-b pb-2">
+                  <div className="font-medium text-gray-900">Big Room Only</div>
+                  <div className="text-sm text-gray-600">R2,000/day or R1,500/half day</div>
                 </div>
               </div>
             </Card>

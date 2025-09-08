@@ -4,36 +4,31 @@ import Card from '../components/Card'
 const Services = () => {
   const services = [
     {
-      title: 'Mediation Rooms',
-      description: 'Professional, private spaces designed specifically for mediation sessions. Equipped with comfortable seating, natural lighting, and all necessary amenities.',
-      image: 'https://via.placeholder.com/600x400/14b8a6/ffffff?text=Mediation+Room',
-      features: ['Private consultation rooms', 'Comfortable seating for up to 8 people', 'Natural lighting', 'Climate controlled', 'Audio/visual equipment available'],
+      title: 'Full Day – Entire Facility',
+      description: 'Complete access to all our facilities for a full day. Includes one big room (12 people) plus two break-away rooms (8 people each). Flexible timing by arrangement.',
+      image: 'https://via.placeholder.com/600x400/14b8a6/ffffff?text=Entire+Facility',
+      features: ['One big room (12 people capacity)', 'Two break-away rooms (8 people each)', '08h30–16h30 (flexible by arrangement)', 'Complete facility access', 'All amenities included'],
       pricing: {
-        hourly: 'R250',
-        halfDay: 'R900',
-        fullDay: 'R1,500'
+        fullDay: 'R4,000'
       }
     },
     {
-      title: 'Training Facilities',
-      description: 'Modern training rooms that can accommodate up to 30 people. Perfect for workshops, seminars, and professional development sessions.',
-      image: 'https://via.placeholder.com/600x400/059669/ffffff?text=Training+Facility',
-      features: ['Capacity for up to 30 people', 'Projection equipment included', 'Whiteboard and flip charts', 'Wi-Fi and power outlets', 'Catering arrangements available'],
+      title: 'Half Day – Entire Facility',
+      description: 'Access to all our facilities for half a day. Perfect for shorter events while still having access to all rooms and amenities.',
+      image: 'https://via.placeholder.com/600x400/059669/ffffff?text=Half+Day+Facility',
+      features: ['One big room (12 people capacity)', 'Two break-away rooms (8 people each)', 'Half day duration', 'Complete facility access', 'All amenities included'],
       pricing: {
-        hourly: 'R400',
-        halfDay: 'R1,400',
-        fullDay: 'R2,400'
+        halfDay: 'R2,000'
       }
     },
     {
-      title: 'Consultation Support',
-      description: 'Flexible spaces for one-on-one consultations and small group meetings. Ideal for client meetings and confidential discussions.',
-      image: 'https://via.placeholder.com/600x400/0d9488/ffffff?text=Consultation+Room',
-      features: ['Intimate setting for 2-4 people', 'Complete privacy', 'Professional atmosphere', 'Coffee and tea facilities', 'Flexible hourly booking'],
+      title: 'Big Room Only',
+      description: 'Access to our main conference room only. Ideal for focused meetings and presentations with a single group.',
+      image: 'https://via.placeholder.com/600x400/0d9488/ffffff?text=Big+Room+Only',
+      features: ['Main room (12 people capacity)', 'Professional setting', 'Audio/visual equipment', 'Natural lighting', 'Climate controlled'],
       pricing: {
-        hourly: 'R180',
-        halfDay: 'R650',
-        fullDay: 'R1,100'
+        fullDay: 'R2,000',
+        halfDay: 'R1,500'
       }
     }
   ]
@@ -41,19 +36,19 @@ const Services = () => {
   const PricingTable = ({ pricing }) => (
     <div className="bg-gray-50 rounded-lg p-4 mt-4">
       <h4 className="font-semibold text-gray-900 mb-3">Pricing</h4>
-      <div className="grid grid-cols-3 gap-4 text-center">
-        <div>
-          <p className="text-sm text-gray-600">Hourly</p>
-          <p className="font-semibold text-primary-teal text-lg">{pricing.hourly}</p>
-        </div>
-        <div>
-          <p className="text-sm text-gray-600">Half Day (4hrs)</p>
-          <p className="font-semibold text-primary-teal text-lg">{pricing.halfDay}</p>
-        </div>
-        <div>
-          <p className="text-sm text-gray-600">Full Day (8hrs)</p>
-          <p className="font-semibold text-primary-teal text-lg">{pricing.fullDay}</p>
-        </div>
+      <div className="flex flex-wrap gap-4 text-center">
+        {pricing.fullDay && (
+          <div className="flex-1 min-w-[120px]">
+            <p className="text-sm text-gray-600">Full Day</p>
+            <p className="font-semibold text-primary-teal text-lg">{pricing.fullDay}</p>
+          </div>
+        )}
+        {pricing.halfDay && (
+          <div className="flex-1 min-w-[120px]">
+            <p className="text-sm text-gray-600">Half Day</p>
+            <p className="font-semibold text-primary-teal text-lg">{pricing.halfDay}</p>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -73,8 +68,8 @@ const Services = () => {
               Our Services
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Professional facilities designed to meet all your mediation, consultation, 
-              and training needs with flexible pricing options.
+              Choose from our flexible facility packages designed to meet your specific needs. 
+              All packages include professional amenities and flexible timing arrangements.
             </p>
           </motion.div>
         </div>

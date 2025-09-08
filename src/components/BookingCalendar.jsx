@@ -15,8 +15,8 @@ const BookingCalendar = ({ onDateSelect, selectedDate }) => {
       } else {
         const mapped = {}
         data.forEach((b) => {
-          // assumes your "date" column is stored as YYYY-MM-DD
-          mapped[b.date] = b.status
+          // Using booking_date column as specified in the requirements
+          mapped[b.booking_date] = b.status
         })
         setBookings(mapped)
       }

@@ -26,6 +26,7 @@ const Navbar = () => {
             className="flex items-center"
           >
             <Link to="/" className="text-2xl font-bold text-primary-teal">
+              {/* TODO: Replace with actual logo when provided */}
               Northcliff MCT
             </Link>
           </motion.div>

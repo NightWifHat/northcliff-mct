@@ -2,6 +2,11 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Card from '../components/Card'
 
+// Import founder logos
+import victorLogo from '/media/victordebruyn.jpg'
+import lizaMarieLogo from '/media/lizamarie.png'
+import kayLogo from '/media/kayschroder.png'
+
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -12,29 +17,31 @@ const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState({})
 
-  // Contact information with placeholder logos
-  // TODO: Replace placeholder logos with actual company logos
+  // Contact information with real founder logos
   const contacts = [
     {
       name: 'Victor de Bruyn',
       title: 'Marketing Manager',
       phone: '+27 82 886 7289',
       email: 'vdebruyn@lindsaykeller.com',
-      logo: 'https://via.placeholder.com/120x60/14b8a6/ffffff?text=Lindsay+Keller'
+      logo: victorLogo,
+      fallbackText: 'Lindsay Keller'
     },
     {
       name: 'Lize-Marié Joubert',
       title: 'Operations Manager',
       phone: '+27 82 560 9251',
       email: 'lmj@jw-law.co.za',
-      logo: 'https://via.placeholder.com/120x60/059669/ffffff?text=JW+Law'
+      logo: lizaMarieLogo,
+      fallbackText: 'JW Law'
     },
     {
-      name: 'Kippie Schroeder',
+      name: 'Kay Schroder',
       title: 'Partner',
       phone: '+27 82 451 2314',
       email: 'kschroeder@werthschroeder.com',
-      logo: 'https://via.placeholder.com/120x60/0d9488/ffffff?text=Werth+Schroeder'
+      logo: kayLogo,
+      fallbackText: 'Werth Schroeder'
     }
   ]
 
@@ -165,13 +172,28 @@ const Contact = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             {contacts.map((contact, index) => (
               <Card key={index} delay={index * 0.1} className="text-center">
-                {/* TODO: Replace placeholder logo with actual company logo */}
                 <div className="mb-6">
                   <img 
                     src={contact.logo} 
                     alt={`${contact.name} Company Logo`}
-                    className="mx-auto h-16 w-auto object-contain rounded-lg"
+                    className="mx-auto h-16 w-auto max-w-full object-contain rounded-lg"
+                    style={{ maxHeight: '60px' }}
+                    onError={(e) => {
+                      // Fallback to text-based placeholder if image fails to load
+                      e.target.style.display = 'none'
+                      const fallbackDiv = e.target.nextElementSibling
+                      if (fallbackDiv) {
+                        fallbackDiv.style.display = 'flex'
+                      }
+                    }}
                   />
+                  {/* Fallback text-based logo */}
+                  <div 
+                    className="mx-auto h-16 w-32 bg-primary-teal text-white rounded-lg items-center justify-center text-sm font-semibold hidden"
+                    style={{ display: 'none', maxHeight: '60px' }}
+                  >
+                    {contact.fallbackText}
+                  </div>
                 </div>
                 
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{contact.name}</h3>

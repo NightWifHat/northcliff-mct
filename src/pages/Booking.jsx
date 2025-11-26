@@ -23,9 +23,12 @@ const Booking = () => {
 
   const packageTypes = [
     { value: '', label: 'Select a package...', price: 0 },
-    { value: 'full-day-entire', label: 'Full Day – Entire Facility', fullDayPrice: 4000, halfDayPrice: null },
-    { value: 'half-day-entire', label: 'Half Day – Entire Facility', fullDayPrice: null, halfDayPrice: 2000 },
-    { value: 'big-room-only', label: 'Big Room Only', fullDayPrice: 2000, halfDayPrice: 1500 }
+    { value: 'half-day', label: 'Half Day Sessions', fullDayPrice: null, halfDayPrice: 2250 },
+    { value: 'full-day', label: 'Full Day', fullDayPrice: 4500, halfDayPrice: null },
+    { value: 'after-hours', label: 'After Hours (per hour)', fullDayPrice: null, halfDayPrice: null, hourlyPrice: 500 },
+    { value: 'boardroom-only', label: 'Boardroom Only (12 pax)', fullDayPrice: 3000, halfDayPrice: 1500 },
+    { value: 'consultation-room', label: 'One Consultation Room (6 pax)', fullDayPrice: 2400, halfDayPrice: 1200 },
+    { value: 'boardroom-consultation', label: 'Boardroom + One Consultation Room (18 pax)', fullDayPrice: 3200, halfDayPrice: 1600 }
   ]
 
   const durations = [
@@ -55,6 +58,11 @@ const Booking = () => {
     
     if (!packageType || !duration) {
       return 0
+    }
+    
+    // Handle hourly pricing (after-hours)
+    if (packageType.hourlyPrice) {
+      return packageType.hourlyPrice
     }
     
     if (duration === 'full-day' && packageType.fullDayPrice) {
@@ -551,18 +559,30 @@ const Booking = () => {
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
                 Package Pricing
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-3 text-sm">
                 <div className="border-b pb-2">
-                  <div className="font-medium text-gray-900">Full Day – Entire Facility</div>
-                  <div className="text-sm text-gray-600">R4,000/day</div>
+                  <div className="font-medium text-gray-900">Half Day Sessions</div>
+                  <div className="text-gray-600">R2,250</div>
                 </div>
                 <div className="border-b pb-2">
-                  <div className="font-medium text-gray-900">Half Day – Entire Facility</div>
-                  <div className="text-sm text-gray-600">R2,000/half day</div>
+                  <div className="font-medium text-gray-900">Full Day</div>
+                  <div className="text-gray-600">R4,500</div>
                 </div>
                 <div className="border-b pb-2">
-                  <div className="font-medium text-gray-900">Big Room Only</div>
-                  <div className="text-sm text-gray-600">R2,000/day or R1,500/half day</div>
+                  <div className="font-medium text-gray-900">After Hours</div>
+                  <div className="text-gray-600">R500 per hour</div>
+                </div>
+                <div className="border-b pb-2">
+                  <div className="font-medium text-gray-900">Boardroom Only (12 pax)</div>
+                  <div className="text-gray-600">R1,500 (half) / R3,000 (full)</div>
+                </div>
+                <div className="border-b pb-2">
+                  <div className="font-medium text-gray-900">Consultation Room (6 pax)</div>
+                  <div className="text-gray-600">R1,200 (half) / R2,400 (full)</div>
+                </div>
+                <div className="pb-2">
+                  <div className="font-medium text-gray-900">Boardroom + Consultation (18 pax)</div>
+                  <div className="text-gray-600">R1,600 (half) / R3,200 (full)</div>
                 </div>
               </div>
             </Card>
@@ -578,7 +598,7 @@ const Booking = () => {
                 </div>
                 <div className="flex items-center">
                   <span className="text-primary-teal mr-2">📞</span>
-                  <span>+27 11 123 4567</span>
+                  <span>TBA</span>
                 </div>
                 <div className="flex items-center">
                   <span className="text-primary-teal mr-2">🕐</span>

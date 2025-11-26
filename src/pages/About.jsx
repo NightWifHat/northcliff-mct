@@ -2,24 +2,21 @@ import { motion } from 'framer-motion'
 import Card from '../components/Card'
 
 const About = () => {
-  const founders = [
+  const team = [
     {
-      name: 'Sarah Mitchell',
-      role: 'Co-Founder & Managing Partner',
-      description: 'With over 15 years in corporate law and mediation, Sarah brings extensive experience in conflict resolution.',
-      image: 'https://via.placeholder.com/300x300/14b8a6/ffffff?text=Sarah+M'
+      name: 'Victor de Bruyn',
+      practice: 'Lindsay Keller',
+      link: 'https://www.lindsaykeller.com'
     },
     {
-      name: 'David Thompson',
-      role: 'Co-Founder & Legal Consultant',
-      description: 'David specializes in commercial law and has facilitated over 200 successful mediation cases.',
-      image: 'https://via.placeholder.com/300x300/059669/ffffff?text=David+T'
+      name: 'Lize-Marié Joubert',
+      practice: 'JW Law',
+      link: 'https://www.jw-law.co.za'
     },
     {
-      name: 'Lisa Chen',
-      role: 'Co-Founder & Training Director',
-      description: 'Lisa focuses on legal training and professional development with expertise in adult education.',
-      image: 'https://via.placeholder.com/300x300/0d9488/ffffff?text=Lisa+C'
+      name: 'Kay Schroder',
+      practice: 'Werth Schroeder',
+      link: 'https://www.werthschroeder.com'
     }
   ]
 
@@ -30,8 +27,8 @@ const About = () => {
       icon: '🎯'
     },
     {
-      title: 'Accessibility',
-      description: 'Our services are designed to be easily accessible to legal professionals at all levels of their careers.',
+      title: 'Accessibility and Flexibility',
+      description: 'Our facilities are accessible and flexible by design, offering a welcoming, neutral space to meet clients or conduct proceedings when additional room or privacy is needed.',
       icon: '🌟'
     },
     {
@@ -41,7 +38,7 @@ const About = () => {
     },
     {
       title: 'Simplicity',
-      description: 'Our booking process and facility management are streamlined for your convenience and efficiency.',
+      description: 'Our booking process and facility management are streamlined for convenience and efficiency.',
       icon: '✨'
     }
   ]
@@ -61,9 +58,7 @@ const About = () => {
               About Northcliff MCT
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Founded by three passionate lawyers, Northcliff MCT was created to address the 
-              growing need for professional, accessible, and affordable spaces for mediation, 
-              consultation, and training in Johannesburg.
+              Northcliff MCT was born from the shared vision of three experienced attorneys who recognized the need for high-quality, affordable professional spaces.
             </p>
           </motion.div>
         </div>
@@ -81,17 +76,13 @@ const About = () => {
             >
               <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
               <p className="text-lg text-gray-600 mb-6">
-                Northcliff MCT was born from the shared vision of three experienced lawyers 
-                who recognized a gap in the market for high-quality, affordable professional spaces.
+                Northcliff MCT was born from the shared vision of three experienced attorneys who recognized the need for high-quality, affordable professional spaces.
               </p>
               <p className="text-lg text-gray-600 mb-6">
-                After years of practicing law and witnessing colleagues struggle to find 
-                suitable venues for mediation sessions, consultations, and training programs, 
-                we decided to create the solution ourselves.
+                After years of practicing law and witnessing colleagues struggle to find suitable venues for alternative dispute resolution, consultation, and training they decided to create the solution themselves.
               </p>
               <p className="text-lg text-gray-600">
-                Our mission is simple: provide professional spaces that don't break the bank, 
-                in a location that's convenient and accessible to legal professionals throughout Johannesburg.
+                The mission is simple: provide professional spaces that are affordable and centrally located for legal and business professionals throughout Johannesburg.
               </p>
             </motion.div>
             <motion.div
@@ -111,7 +102,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* Founders Section */}
+      {/* Our Team Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -121,29 +112,29 @@ const About = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">Meet Our Founders</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Team</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Three experienced legal professionals with a shared commitment to excellence and accessibility.
+              Three experienced attorneys with a shared commitment to excellence and accessibility.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {founders.map((founder, index) => (
+            {team.map((member, index) => (
               <Card key={index} delay={index * 0.2} className="text-center">
-                <img
-                  src={founder.image}
-                  alt={founder.name}
-                  className="w-32 h-32 rounded-full mx-auto mb-6 object-cover"
-                />
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {founder.name}
+                <h3 className="text-2xl font-semibold text-gray-900 mb-3">
+                  {member.name}
                 </h3>
-                <p className="text-primary-teal font-medium mb-4">
-                  {founder.role}
-                </p>
-                <p className="text-gray-600">
-                  {founder.description}
-                </p>
+                <a 
+                  href={member.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary-teal hover:text-primary-green font-medium text-lg transition-colors inline-flex items-center justify-center gap-2"
+                >
+                  {member.practice}
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
               </Card>
             ))}
           </div>

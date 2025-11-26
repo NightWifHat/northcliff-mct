@@ -147,9 +147,14 @@ const Contact = () => {
                 </svg>
                 <h2 className="text-2xl font-bold text-gray-900">Our Location</h2>
               </div>
-              <p className="text-lg text-gray-700">
-                2nd Floor, Impala Center, 177 Beyers Naudé Drive, Northcliff
-              </p>
+              <div className="text-lg text-gray-700 space-y-1">
+                <p>Second Floor</p>
+                <p>Impala Centre</p>
+                <p>177 Beyers Naude Drive</p>
+                <p>Northcliff, Johannesburg</p>
+                <p>2195</p>
+                <p className="text-sm text-gray-600 italic mt-2">(Entrance from Hockey Avenue)</p>
+              </div>
             </Card>
           </motion.div>
         </div>
@@ -325,8 +330,9 @@ const Contact = () => {
                       📧
                     </div>
                     <div className="ml-4">
-                      <h4 className="text-lg font-semibold text-gray-900">General Inquiries</h4>
-                      <p className="text-gray-600">info@northcliffmct.co.za</p>
+                      <h4 className="text-lg font-semibold text-gray-900">Contact Information</h4>
+                      <p className="text-gray-600">Email: info@northcliffmct.co.za</p>
+                      <p className="text-gray-600">Telephone: TBA</p>
                       <p className="text-sm text-gray-500 mt-1">We respond within 24 hours</p>
                     </div>
                   </div>

@@ -6,23 +6,33 @@ const Home = () => {
   const features = [
     {
       title: 'Professional Environment',
-      description: 'Modern, well-equipped spaces designed for successful mediation and consultation sessions.',
+      description: 'Modern, well-equipped spaces designed to cater to a full range of professional functions including conciliation, mediation, arbitration, disciplinary hearings, board meetings, training, workshops, and seminars.',
       icon: '🏢'
     },
     {
       title: 'Experienced Founded',
-      description: 'Established by three experienced lawyers who understand the needs of legal professionals.',
+      description: 'Designed by practising attorneys who understand the requirements of legal and business professionals.',
       icon: '👩‍💼'
     },
     {
       title: 'Affordable Rates',
-      description: 'Competitive pricing to make professional spaces accessible to all practitioners.',
+      description: 'Affordably priced spaces make professionalism within reach.',
       icon: '💰'
     },
     {
-      title: 'Flexible Booking',
+      title: 'Accommodative Booking',
       description: 'Hourly, half-day, and full-day options to suit your specific requirements.',
       icon: '📅'
+    },
+    {
+      title: 'Flexible Spaces',
+      description: 'A boardroom seating 12 to 18 and two consultation rooms seating up to 8. Space can convert into a training facility for up to 24 attendees.',
+      icon: '🪑'
+    },
+    {
+      title: 'Refreshments and Amenities',
+      description: 'Uninterrupted Wi-Fi, backup power, and complimentary coffee, tea, and water.',
+      icon: '☕'
     }
   ]
 
@@ -44,13 +54,11 @@ const Home = () => {
               Welcome to Northcliff MCT
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              We provide professional, accessible, and affordable spaces for mediation, consultation, 
-              and training in the heart of Northcliff. Our facility was founded by three experienced 
-              lawyers who recognized the need for quality, cost-effective professional spaces.
+              Be it resolution, growth, or connection, Northcliff MCT adapts to meet your purpose.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <Card key={index} delay={index * 0.1} className="text-center">
                 <div className="text-4xl mb-4">{feature.icon}</div>

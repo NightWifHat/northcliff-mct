@@ -22,9 +22,8 @@ const Hero = () => {
           transition={{ duration: 0.8 }}
           className="text-4xl md:text-6xl font-bold mb-6 leading-tight"
         >
-          Affordable, professional space for{' '}
-          <span className="text-primary-teal">mediation, consultation, and training</span>{' '}
-          in Northcliff
+          Affordable, convenient mediation, consultation, and training in{' '}
+          <span className="text-primary-teal">Northcliff</span>
         </motion.h1>
 
         <motion.p
@@ -33,7 +32,7 @@ const Hero = () => {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-xl md:text-2xl mb-8 text-gray-200"
         >
-          Founded by experienced lawyers, we provide accessible and professional facilities for your business needs.
+          Founded by experienced attorneys, this well-appointed space combines functionality, comfort and professionalism.
         </motion.p>
 
         <motion.div
@@ -46,7 +45,7 @@ const Hero = () => {
             to="/booking"
             className="btn-primary text-lg px-8 py-4 inline-block"
           >
-            Book a Room
+            Book a Space
           </Link>
           <Link
             to="/contact"

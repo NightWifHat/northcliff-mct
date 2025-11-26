@@ -4,54 +4,51 @@ import Card from '../components/Card'
 const Services = () => {
   const services = [
     {
-      title: 'Full Day – Entire Facility',
-      description: 'Complete access to all our facilities for a full day. Includes one big room (12 people) plus two break-away rooms (8 people each). Flexible timing by arrangement.',
-      image: 'https://via.placeholder.com/600x400/14b8a6/ffffff?text=Entire+Facility',
-      features: ['One big room (12 people capacity)', 'Two break-away rooms (8 people each)', '08h30–16h30 (flexible by arrangement)', 'Complete facility access', 'All amenities included'],
-      pricing: {
-        fullDay: 'R4,000'
-      }
+      title: 'Half Day Sessions',
+      description: 'Flexible half-day booking with two convenient time slots to choose from.',
+      image: 'https://via.placeholder.com/600x400/14b8a6/ffffff?text=Half+Day',
+      sessions: [
+        { name: 'Session 1', time: '08:00 to 13:00' },
+        { name: 'Session 2', time: '13:00 to 18:00' }
+      ],
+      pricing: 'R2 250,00'
     },
     {
-      title: 'Half Day – Entire Facility',
-      description: 'Access to all our facilities for half a day. Perfect for shorter events while still having access to all rooms and amenities.',
-      image: 'https://via.placeholder.com/600x400/059669/ffffff?text=Half+Day+Facility',
-      features: ['One big room (12 people capacity)', 'Two break-away rooms (8 people each)', 'Half day duration', 'Complete facility access', 'All amenities included'],
-      pricing: {
-        halfDay: 'R2,000'
-      }
+      title: 'Full Day',
+      description: 'Complete day access from morning to evening for extended meetings and events.',
+      image: 'https://via.placeholder.com/600x400/059669/ffffff?text=Full+Day',
+      time: '08:00 to 18:00',
+      pricing: 'R4 500,00'
     },
     {
-      title: 'Big Room Only',
-      description: 'Access to our main conference room only. Ideal for focused meetings and presentations with a single group.',
-      image: 'https://via.placeholder.com/600x400/0d9488/ffffff?text=Big+Room+Only',
-      features: ['Main room (12 people capacity)', 'Professional setting', 'Audio/visual equipment', 'Natural lighting', 'Climate controlled'],
-      pricing: {
-        fullDay: 'R2,000',
-        halfDay: 'R1,500'
-      }
+      title: 'After Hours',
+      description: 'Flexible booking for evenings and Saturdays when you need space outside regular hours.',
+      image: 'https://via.placeholder.com/600x400/0d9488/ffffff?text=After+Hours',
+      note: 'Including Saturdays',
+      pricing: 'R500 p/h'
     }
   ]
 
-  const PricingTable = ({ pricing }) => (
-    <div className="bg-gray-50 rounded-lg p-4 mt-4">
-      <h4 className="font-semibold text-gray-900 mb-3">Pricing</h4>
-      <div className="flex flex-wrap gap-4 text-center">
-        {pricing.fullDay && (
-          <div className="flex-1 min-w-[120px]">
-            <p className="text-sm text-gray-600">Full Day</p>
-            <p className="font-semibold text-primary-teal text-lg">{pricing.fullDay}</p>
-          </div>
-        )}
-        {pricing.halfDay && (
-          <div className="flex-1 min-w-[120px]">
-            <p className="text-sm text-gray-600">Half Day</p>
-            <p className="font-semibold text-primary-teal text-lg">{pricing.halfDay}</p>
-          </div>
-        )}
-      </div>
-    </div>
-  )
+  const spaceOptions = [
+    {
+      title: 'Boardroom Only (12 pax)',
+      halfDay: 'R1 500,00',
+      fullDay: 'R3 000,00',
+      hourly: 'R500 p/h'
+    },
+    {
+      title: 'One Consultation Room (6 pax)',
+      halfDay: 'R1 200,00',
+      fullDay: 'R2 400,00',
+      hourly: 'R500 p/h'
+    },
+    {
+      title: 'Boardroom + One Consultation Room (18 pax)',
+      halfDay: 'R1 600,00',
+      fullDay: 'R3 200,00',
+      hourly: 'R500 p/h'
+    }
+  ]
 
   return (
     <div className="pt-16">
@@ -68,80 +65,102 @@ const Services = () => {
               Our Services
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Choose from our flexible facility packages designed to meet your specific needs. 
-              All packages include professional amenities and flexible timing arrangements.
+              Choose from our flexible booking options designed to meet your needs. All options include uncapped Wi-Fi, uninterrupted power supply, complimentary coffee, tea, and water, secure on-site parking.
+            </p>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed mt-4">
+              Reception services, document printing, and basic administrative assistance available upon request. 
+              Refreshments and catering can be arranged with Olivia's Coffee Bake.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Booking Options Section */}
       <section className="py-20 bg-light-gray">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-20">
-            {services.map((service, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-                viewport={{ once: true }}
-                className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${
-                  index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
-                }`}
-              >
-                <div className={index % 2 === 1 ? 'lg:col-start-2' : ''}>
-                  <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                    {service.title}
-                  </h2>
-                  <p className="text-lg text-gray-600 mb-6">
-                    {service.description}
-                  </p>
-                  
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Features:</h3>
-                  <ul className="space-y-2 mb-6">
-                    {service.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-start">
-                        <svg
-                          className="h-6 w-6 text-primary-teal mr-2 mt-0.5 flex-shrink-0"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
-                        <span className="text-gray-600">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Booking Options</h2>
+          </motion.div>
 
-                  <PricingTable pricing={service.pricing} />
-                  
-                  <div className="mt-6">
-                    <a
-                      href="/booking"
-                      className="btn-primary inline-block"
-                    >
-                      Book This Service
-                    </a>
-                  </div>
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            {services.map((service, index) => (
+              <Card key={index} delay={index * 0.1} className="text-center">
+                <h3 className="text-2xl font-semibold text-gray-900 mb-4">
+                  {service.title}
+                </h3>
+                <p className="text-gray-600 mb-6">
+                  {service.description}
+                </p>
                 
-                <div className={index % 2 === 1 ? 'lg:col-start-1' : ''}>
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="rounded-xl shadow-lg w-full h-80 object-cover"
-                  />
+                {service.sessions && (
+                  <div className="mb-6 space-y-2">
+                    {service.sessions.map((session, idx) => (
+                      <div key={idx} className="bg-gray-50 rounded-lg p-3">
+                        <p className="font-semibold text-gray-900">{session.name}</p>
+                        <p className="text-sm text-gray-600">{session.time}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {service.time && (
+                  <div className="mb-6">
+                    <div className="bg-gray-50 rounded-lg p-3">
+                      <p className="font-semibold text-gray-900">{service.time}</p>
+                    </div>
+                  </div>
+                )}
+
+                {service.note && (
+                  <p className="text-sm text-gray-600 italic mb-4">{service.note}</p>
+                )}
+                
+                <div className="mt-6 pt-6 border-t border-gray-200">
+                  <p className="text-sm text-gray-600 mb-2">Price</p>
+                  <p className="text-3xl font-bold text-primary-teal">{service.pricing}</p>
                 </div>
-              </motion.div>
+              </Card>
             ))}
           </div>
+
+          {/* Space Options Table */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="bg-white rounded-xl shadow-lg p-8"
+          >
+            <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">Space Options</h3>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b-2 border-gray-200">
+                    <th className="text-left py-4 px-4 font-semibold text-gray-900">Space Type</th>
+                    <th className="text-center py-4 px-4 font-semibold text-gray-900">Half Day</th>
+                    <th className="text-center py-4 px-4 font-semibold text-gray-900">Full Day</th>
+                    <th className="text-center py-4 px-4 font-semibold text-gray-900">Hourly</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {spaceOptions.map((option, index) => (
+                    <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                      <td className="py-4 px-4 font-medium text-gray-900">{option.title}</td>
+                      <td className="py-4 px-4 text-center text-primary-teal font-semibold">{option.halfDay}</td>
+                      <td className="py-4 px-4 text-center text-primary-teal font-semibold">{option.fullDay}</td>
+                      <td className="py-4 px-4 text-center text-primary-teal font-semibold">{option.hourly}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </motion.div>
         </div>
       </section>
 

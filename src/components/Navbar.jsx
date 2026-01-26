@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import nmctLogo from '../assets/logo/nmct-logo-dark-teal.svg'
+import nmctLogo from '../assets/logo/nmct-logo-colour.svg'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)

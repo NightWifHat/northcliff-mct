@@ -76,10 +76,15 @@ const BookingCalendar = ({ onDateSelect, selectedDate }) => {
   const getDateStatus = (date) => {
     if (!date) return "empty"
     const today = new Date()
+    today.setHours(0, 0, 0, 0)
     const dateKey = formatDate(date)
+    
+    // Create a copy of the date for comparison to avoid mutation
+    const compareDate = new Date(date)
+    compareDate.setHours(0, 0, 0, 0)
 
     // Block past dates
-    if (date < today.setHours(0, 0, 0, 0)) {
+    if (compareDate < today) {
       return "past"
     }
 

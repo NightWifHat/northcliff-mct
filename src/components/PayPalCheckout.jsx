@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion } from 'framer-motion'
+
+// PayPal Client ID - TODO: Replace with actual client ID from PayPal Developer Dashboard
+const PAYPAL_CLIENT_ID = "YOUR_SANDBOX_CLIENT_ID_HERE"
 
 const PayPalCheckout = ({ amount, bookingDetails, onPaymentSuccess, onPaymentError }) => {
   const [isPayPalLoaded, setIsPayPalLoaded] = useState(false)
   const [paymentProcessing, setPaymentProcessing] = useState(false)
   const [showPayPal, setShowPayPal] = useState(false)
-
-  // TODO: Replace with actual PayPal client ID from PayPal Developer Dashboard
-  const PAYPAL_CLIENT_ID = "YOUR_SANDBOX_CLIENT_ID_HERE"
+  const paypalButtonsRef = useRef(null)
 
   useEffect(() => {
     // Load PayPal SDK (sandbox mode for development)
@@ -27,7 +28,7 @@ const PayPalCheckout = ({ amount, bookingDetails, onPaymentSuccess, onPaymentErr
       }
       script.onerror = () => {
         console.error('Failed to load PayPal SDK')
-        onPaymentError && onPaymentError({ message: 'Failed to load PayPal SDK' })
+        onPaymentError?.({ message: 'Failed to load PayPal SDK' })
       }
       document.head.appendChild(script)
     }
@@ -43,17 +44,15 @@ const PayPalCheckout = ({ amount, bookingDetails, onPaymentSuccess, onPaymentErr
         existingScript.remove()
       }
     }
-  }, [amount, PAYPAL_CLIENT_ID, onPaymentError])
+  }, [amount, onPaymentError])
 
-  useEffect(() => {
-    if (isPayPalLoaded && showPayPal && amount > 0) {
-      renderPayPalButtons()
-    }
-  }, [isPayPalLoaded, showPayPal, amount])
-
-  const renderPayPalButtons = () => {
+  const renderPayPalButtons = useCallback(() => {
     const paypalButtonContainer = document.getElementById('paypal-button-container')
     if (!paypalButtonContainer || !window.paypal) return
+
+    // Prevent duplicate renders
+    if (paypalButtonsRef.current) return
+    paypalButtonsRef.current = true
 
     // Clear existing buttons
     paypalButtonContainer.innerHTML = ''
@@ -97,10 +96,10 @@ const PayPalCheckout = ({ amount, bookingDetails, onPaymentSuccess, onPaymentErr
             bookingDetails: bookingDetails
           }
           
-          onPaymentSuccess && onPaymentSuccess(paymentData)
+          onPaymentSuccess?.(paymentData)
         } catch (error) {
           console.error('Payment processing error:', error)
-          onPaymentError && onPaymentError(error)
+          onPaymentError?.(error)
         } finally {
           setPaymentProcessing(false)
         }
@@ -108,14 +107,21 @@ const PayPalCheckout = ({ amount, bookingDetails, onPaymentSuccess, onPaymentErr
       onError: (error) => {
         console.error('PayPal error:', error)
         setPaymentProcessing(false)
-        onPaymentError && onPaymentError(error)
+        onPaymentError?.(error)
       },
       onCancel: (data) => {
         console.log('Payment cancelled by user:', data)
         setPaymentProcessing(false)
       }
     }).render('#paypal-button-container')
-  }
+  }, [amount, bookingDetails, onPaymentSuccess, onPaymentError])
+
+  useEffect(() => {
+    if (isPayPalLoaded && showPayPal && amount > 0) {
+      paypalButtonsRef.current = false // Reset ref when conditions change
+      renderPayPalButtons()
+    }
+  }, [isPayPalLoaded, showPayPal, amount, renderPayPalButtons])
 
   const handleProceedToPayment = () => {
     setShowPayPal(true)

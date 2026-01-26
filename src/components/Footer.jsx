@@ -19,7 +19,6 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <h3 className="text-2xl font-bold text-primary-teal mb-4">
-              {/* TODO: Replace with actual logo when provided */}
               Northcliff MCT
             </h3>
             <p className="text-gray-300 mb-4">
@@ -50,7 +49,7 @@ const Footer = () => {
             <div className="space-y-2 text-gray-300">
               <p>📧 info@northcliffmct.co.za</p>
               <p>📞 TBA</p>
-              <p>📍 Second Floor, Impala Centre<br/>177 Beyers Naude Drive, Northcliff<br/>Johannesburg, 2195</p>
+              <p>📍 Impala Chambers<br/>177 Beyers Naude Drive, Northcliff<br/>Johannesburg, 2195</p>
             </div>
           </div>
         </div>

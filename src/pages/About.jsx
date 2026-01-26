@@ -14,8 +14,8 @@ const About = () => {
       link: 'https://www.jw-law.co.za'
     },
     {
-      name: 'Kay Schroder',
-      practice: 'Werth Schroeder',
+      name: 'Kay Schröder',
+      practice: 'Werth Schröder',
       link: 'https://www.werthschroeder.com'
     }
   ]
@@ -94,7 +94,7 @@ const About = () => {
             >
               <img
                 src="https://via.placeholder.com/600x400/14b8a6/ffffff?text=Our+Professional+Facility"
-                alt="Our facility"
+                alt="Northcliff MCT professional meeting facility interior"
                 className="rounded-xl shadow-lg w-full"
               />
             </motion.div>

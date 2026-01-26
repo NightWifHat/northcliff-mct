@@ -4,6 +4,7 @@ import Card from '../components/Card'
 import BookingCalendar from '../components/BookingCalendar'
 import PayPalCheckout from '../components/PayPalCheckout'
 import { supabase } from '../supabaseClient'
+import { formatZAR, formatZARHourly } from '../utils/currency'
 
 const Booking = () => {
   const [selectedDate, setSelectedDate] = useState(null)
@@ -562,27 +563,27 @@ const Booking = () => {
               <div className="space-y-3 text-sm">
                 <div className="border-b pb-2">
                   <div className="font-medium text-gray-900">Half Day Sessions</div>
-                  <div className="text-gray-600">R2,250</div>
+                  <div className="text-gray-600">{formatZAR(2250, false)}</div>
                 </div>
                 <div className="border-b pb-2">
                   <div className="font-medium text-gray-900">Full Day</div>
-                  <div className="text-gray-600">R4,500</div>
+                  <div className="text-gray-600">{formatZAR(4500, false)}</div>
                 </div>
                 <div className="border-b pb-2">
                   <div className="font-medium text-gray-900">After Hours</div>
-                  <div className="text-gray-600">R500 per hour</div>
+                  <div className="text-gray-600">{formatZARHourly(500)}</div>
                 </div>
                 <div className="border-b pb-2">
                   <div className="font-medium text-gray-900">Boardroom Only (12 pax)</div>
-                  <div className="text-gray-600">R1,500 (half) / R3,000 (full)</div>
+                  <div className="text-gray-600">{formatZAR(1500, false)} (half) / {formatZAR(3000, false)} (full)</div>
                 </div>
                 <div className="border-b pb-2">
                   <div className="font-medium text-gray-900">Consultation Room (6 pax)</div>
-                  <div className="text-gray-600">R1,200 (half) / R2,400 (full)</div>
+                  <div className="text-gray-600">{formatZAR(1200, false)} (half) / {formatZAR(2400, false)} (full)</div>
                 </div>
                 <div className="pb-2">
                   <div className="font-medium text-gray-900">Boardroom + Consultation (18 pax)</div>
-                  <div className="text-gray-600">R1,600 (half) / R3,200 (full)</div>
+                  <div className="text-gray-600">{formatZAR(1600, false)} (half) / {formatZAR(3200, false)} (full)</div>
                 </div>
               </div>
             </Card>

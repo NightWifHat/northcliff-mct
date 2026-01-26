@@ -1,5 +1,7 @@
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Card from '../components/Card'
+import { formatZAR, formatZARHourly } from '../utils/currency'
 
 const Services = () => {
   const services = [
@@ -11,42 +13,42 @@ const Services = () => {
         { name: 'Session 1', time: '08:00 to 13:00' },
         { name: 'Session 2', time: '13:00 to 18:00' }
       ],
-      pricing: 'R2 250,00'
+      price: 2250
     },
     {
       title: 'Full Day',
       description: 'Complete day access from morning to evening for extended meetings and events.',
       image: 'https://via.placeholder.com/600x400/059669/ffffff?text=Full+Day',
       time: '08:00 to 18:00',
-      pricing: 'R4 500,00'
+      price: 4500
     },
     {
       title: 'After Hours',
       description: 'Flexible booking for evenings and Saturdays when you need space outside regular hours.',
       image: 'https://via.placeholder.com/600x400/0d9488/ffffff?text=After+Hours',
       note: 'Including Saturdays',
-      pricing: 'R500 p/h'
+      hourlyPrice: 500
     }
   ]
 
   const spaceOptions = [
     {
       title: 'Boardroom Only (12 pax)',
-      halfDay: 'R1 500,00',
-      fullDay: 'R3 000,00',
-      hourly: 'R500 p/h'
+      halfDayPrice: 1500,
+      fullDayPrice: 3000,
+      hourlyPrice: 500
     },
     {
       title: 'One Consultation Room (6 pax)',
-      halfDay: 'R1 200,00',
-      fullDay: 'R2 400,00',
-      hourly: 'R500 p/h'
+      halfDayPrice: 1200,
+      fullDayPrice: 2400,
+      hourlyPrice: 500
     },
     {
       title: 'Boardroom + One Consultation Room (18 pax)',
-      halfDay: 'R1 600,00',
-      fullDay: 'R3 200,00',
-      hourly: 'R500 p/h'
+      halfDayPrice: 1600,
+      fullDayPrice: 3200,
+      hourlyPrice: 500
     }
   ]
 
@@ -68,7 +70,7 @@ const Services = () => {
               Choose from our flexible booking options designed to meet your needs. All options include uncapped Wi-Fi, uninterrupted power supply, complimentary coffee, tea, and water, secure on-site parking.
             </p>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed mt-4">
-              Reception services, document printing, and basic administrative assistance available upon request. 
+              Document printing and basic administrative assistance available upon request. 
               Refreshments and catering can be arranged with Olivia's Coffee Bake.
             </p>
           </motion.div>
@@ -123,7 +125,9 @@ const Services = () => {
                 
                 <div className="mt-6 pt-6 border-t border-gray-200">
                   <p className="text-sm text-gray-600 mb-2">Price</p>
-                  <p className="text-3xl font-bold text-primary-teal">{service.pricing}</p>
+                  <p className="text-3xl font-bold text-primary-teal">
+                    {service.price ? formatZAR(service.price) : formatZARHourly(service.hourlyPrice)}
+                  </p>
                 </div>
               </Card>
             ))}
@@ -152,9 +156,9 @@ const Services = () => {
                   {spaceOptions.map((option, index) => (
                     <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                       <td className="py-4 px-4 font-medium text-gray-900">{option.title}</td>
-                      <td className="py-4 px-4 text-center text-primary-teal font-semibold">{option.halfDay}</td>
-                      <td className="py-4 px-4 text-center text-primary-teal font-semibold">{option.fullDay}</td>
-                      <td className="py-4 px-4 text-center text-primary-teal font-semibold">{option.hourly}</td>
+                      <td className="py-4 px-4 text-center text-primary-teal font-semibold">{formatZAR(option.halfDayPrice)}</td>
+                      <td className="py-4 px-4 text-center text-primary-teal font-semibold">{formatZAR(option.fullDayPrice)}</td>
+                      <td className="py-4 px-4 text-center text-primary-teal font-semibold">{formatZARHourly(option.hourlyPrice)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -182,28 +186,18 @@ const Services = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <Card className="text-center">
               <div className="text-4xl mb-4">☕</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">
                 Catering Services
               </h3>
               <p className="text-gray-600">
-                Coffee, tea, light refreshments, and full meal options available upon request.
+                Coffee, tea, light refreshments, and full meal options available upon request through Olivia's Coffee Bake.
               </p>
             </Card>
 
             <Card delay={0.1} className="text-center">
-              <div className="text-4xl mb-4">📋</div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Administrative Support
-              </h3>
-              <p className="text-gray-600">
-                Reception services, document printing, and basic administrative assistance.
-              </p>
-            </Card>
-
-            <Card delay={0.2} className="text-center">
               <div className="text-4xl mb-4">🅿️</div>
               <h3 className="text-xl font-semibold text-gray-900 mb-3">
                 Parking Available
@@ -232,18 +226,18 @@ const Services = () => {
               Contact us today to discuss your requirements and book the perfect space for your needs.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="/booking"
+              <Link
+                to="/booking"
                 className="bg-white text-primary-teal font-semibold py-3 px-8 rounded-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 Book Now
-              </a>
-              <a
-                href="/contact"
+              </Link>
+              <Link
+                to="/contact"
                 className="border-2 border-white text-white font-semibold py-3 px-8 rounded-lg hover:bg-white hover:text-primary-teal transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 Contact Us
-              </a>
+              </Link>
             </div>
           </motion.div>
         </div>

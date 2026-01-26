@@ -143,8 +143,8 @@ src/
 - **Three professional contacts with placeholder logos**
   - Victor de Bruyn (Marketing Manager) - Lindsay Keller
   - Lize-Marié Joubert (Operations Manager) - JW Law  
-  - Kippie Schroeder (Partner) - Werth Schroeder
-- **Complete address**: 2nd Floor, Impala Center, 177 Beyers Naudé Drive, Northcliff
+  - Kay Schröder (Partner) - Werth Schröder
+- **Complete address**: Impala Chambers, 177 Beyers Naudé Drive, Northcliff, Johannesburg, 2195
 - **Embedded Google Maps integration** showing Northcliff, Johannesburg
 - Contact information display in styled card layout
 

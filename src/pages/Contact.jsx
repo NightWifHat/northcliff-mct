@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Card from '../components/Card'
 
@@ -36,12 +37,12 @@ const Contact = () => {
       fallbackText: 'JW Law'
     },
     {
-      name: 'Kay Schroder',
+      name: 'Kay Schröder',
       title: 'Partner',
       phone: '+27 82 451 2314',
       email: 'kschroeder@werthschroeder.com',
       logo: kayLogo,
-      fallbackText: 'Werth Schroeder'
+      fallbackText: 'Werth Schröder'
     }
   ]
 
@@ -148,8 +149,7 @@ const Contact = () => {
                 <h2 className="text-2xl font-bold text-gray-900">Our Location</h2>
               </div>
               <div className="text-lg text-gray-700 space-y-1">
-                <p>Second Floor</p>
-                <p>Impala Centre</p>
+                <p>Impala Chambers</p>
                 <p>177 Beyers Naude Drive</p>
                 <p>Northcliff, Johannesburg</p>
                 <p>2195</p>
@@ -339,7 +339,7 @@ const Contact = () => {
 
                   <div className="flex items-start">
                     <div className="flex-shrink-0 w-12 h-12 bg-primary-teal rounded-lg flex items-center justify-center text-white text-xl">
-                      
+                      🕐
                     </div>
                     <div className="ml-4">
                       <h4 className="text-lg font-semibold text-gray-900">Business Hours</h4>
@@ -359,27 +359,27 @@ const Contact = () => {
                   Quick Actions
                 </h3>
                 <div className="space-y-3">
-                  <a
-                    href="/booking"
+                  <Link
+                    to="/booking"
                     className="flex items-center p-3 bg-primary-teal text-white rounded-lg hover:bg-primary-green transition-colors"
                   >
                     <span className="mr-3">📅</span>
                     <span className="font-medium">Book a Room</span>
-                  </a>
-                  <a
-                    href="/services"
+                  </Link>
+                  <Link
+                    to="/services"
                     className="flex items-center p-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                   >
                     <span className="mr-3">🏢</span>
                     <span className="font-medium">View Services</span>
-                  </a>
-                  <a
-                    href="/gallery"
+                  </Link>
+                  <Link
+                    to="/gallery"
                     className="flex items-center p-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
                   >
                     <span className="mr-3">🖼️</span>
                     <span className="font-medium">Tour Our Facilities</span>
-                  </a>
+                  </Link>
                 </div>
               </Card>
             </motion.div>
@@ -413,16 +413,15 @@ const Contact = () => {
             className="bg-white rounded-xl shadow-lg overflow-hidden"
           >
             <div className="h-96 w-full">
-              {/* Google Maps Embed for Northcliff, Johannesburg */}
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d57298.263703282444!2d27.947863099999996!3d-26.141934449999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e950c68f0b6903b%3A0x6b1b2b2b2b2b2b2b!2sNorthcliff%2C%20Randburg%2C%20South%20Africa!5e0!3m2!1sen!2sus!4v1693737600000!5m2!1sen!2sus"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.892!2d27.9611!3d-26.1419!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1e950c68f0406a59%3A0x4f0d1a5c5c9c5c5c!2s177%20Beyers%20Naud%C3%A9%20Dr%2C%20Northcliff%2C%20Johannesburg%2C%202195!5e0!3m2!1sen!2sza!4v1706000000000!5m2!1sen!2sza"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
                 allowFullScreen=""
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Northcliff MCT Location - Northcliff, Johannesburg"
+                title="Northcliff MCT Location - Impala Chambers, 177 Beyers Naude Drive, Northcliff, Johannesburg"
               ></iframe>
             </div>
           </motion.div>

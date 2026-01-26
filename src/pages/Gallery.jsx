@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Card from '../components/Card'
 import Modal from '../components/Modal'
@@ -6,7 +7,7 @@ import Modal from '../components/Modal'
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState(null)
   
-  // TODO: Replace with actual facility images
+  // Gallery images - placeholder images pending actual facility photographs
   const images = [
     {
       id: 1,
@@ -18,7 +19,7 @@ const Gallery = () => {
       id: 2,
       src: 'https://via.placeholder.com/600x400/059669/ffffff?text=Training+Hall',
       title: 'Training Hall',
-      description: 'Modern training facility accommodating up to 30 people with state-of-the-art AV equipment'
+      description: 'Modern training facility accommodating up to 24 people with state-of-the-art AV equipment'
     },
     {
       id: 3,
@@ -28,36 +29,30 @@ const Gallery = () => {
     },
     {
       id: 4,
-      src: 'https://via.placeholder.com/600x400/0f766e/ffffff?text=Reception+Area',
-      title: 'Reception Area',
-      description: 'Professional welcoming entrance with comfortable seating and reception services'
+      src: 'https://via.placeholder.com/600x400/134e4a/ffffff?text=Boardroom',
+      title: 'Boardroom',
+      description: 'Executive boardroom-style setup with modern presentation facilities seating 12-18'
     },
     {
       id: 5,
-      src: 'https://via.placeholder.com/600x400/134e4a/ffffff?text=Conference+Room',
-      title: 'Conference Room',
-      description: 'Executive boardroom-style setup with modern presentation facilities'
-    },
-    {
-      id: 6,
       src: 'https://via.placeholder.com/600x400/14b8a6/ffffff?text=Breakout+Area',
       title: 'Breakout Area',
       description: 'Relaxed space for informal discussions and networking during breaks'
     },
     {
-      id: 7,
+      id: 6,
       src: 'https://via.placeholder.com/600x400/059669/ffffff?text=Mediation+Room+2',
       title: 'Secondary Mediation Room',
       description: 'Smaller mediation space perfect for intimate sessions and family disputes'
     },
     {
-      id: 8,
+      id: 7,
       src: 'https://via.placeholder.com/600x400/0d9488/ffffff?text=Kitchen+Area',
       title: 'Kitchen & Refreshment Area',
       description: 'Fully equipped kitchen area for catering services and refreshments'
     },
     {
-      id: 9,
+      id: 8,
       src: 'https://via.placeholder.com/600x400/0f766e/ffffff?text=Parking+Area',
       title: 'Secure Parking',
       description: 'Safe and secure parking facilities available for all clients and visitors'
@@ -106,6 +101,33 @@ const Gallery = () => {
     const prevIndex = (currentIndex - 1 + images.length) % images.length
     setSelectedImage(images[prevIndex])
   }
+
+  // Handle keyboard navigation in modal
+  const handleKeyDown = (e) => {
+    if (!selectedImage) return
+    
+    switch (e.key) {
+      case 'ArrowLeft':
+        prevImage()
+        break
+      case 'ArrowRight':
+        nextImage()
+        break
+      case 'Escape':
+        closeModal()
+        break
+      default:
+        break
+    }
+  }
+
+  // Add keyboard listener when modal is open
+  useEffect(() => {
+    if (selectedImage) {
+      window.addEventListener('keydown', handleKeyDown)
+      return () => window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [selectedImage])
 
   return (
     <div className="pt-16">
@@ -208,7 +230,7 @@ const Gallery = () => {
               { icon: '☕', title: 'Refreshments', description: 'Coffee, tea, and catering services available' },
               { icon: '🔒', title: 'Secure Access', description: 'Controlled access and security systems' },
               { icon: '🅿️', title: 'Free Parking', description: 'On-site parking for all visitors' },
-              { icon: '♿', title: 'Accessible', description: 'Wheelchair accessible facilities' }
+              { icon: '⚡', title: 'Backup Power', description: 'Uninterrupted power supply for all facilities' }
             ].map((feature, index) => (
               <motion.div
                 key={index}
@@ -247,25 +269,29 @@ const Gallery = () => {
               Book a tour or reserve your space today to see our professional facilities in person.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="/booking"
+              <Link
+                to="/booking"
                 className="bg-white text-primary-teal font-semibold py-3 px-8 rounded-lg hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 Book a Space
-              </a>
-              <a
-                href="/contact"
+              </Link>
+              <Link
+                to="/contact"
                 className="border-2 border-white text-white font-semibold py-3 px-8 rounded-lg hover:bg-white hover:text-primary-teal transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
               >
                 Schedule a Tour
-              </a>
+              </Link>
             </div>
           </motion.div>
         </div>
       </section>
 
       {/* Modal for Image Preview */}
-      <Modal isOpen={selectedImage !== null} onClose={closeModal}>
+      <Modal 
+        isOpen={selectedImage !== null} 
+        onClose={closeModal}
+        ariaLabel={selectedImage ? `Image preview: ${selectedImage.title}` : 'Image preview'}
+      >
         {selectedImage && (
           <div className="relative">
             <img

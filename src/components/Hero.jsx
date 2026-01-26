@@ -4,15 +4,7 @@ import { Link } from 'react-router-dom'
 const Hero = () => {
   return (
     <section className="relative bg-gray-900 min-h-screen flex items-center justify-center">
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <img
-          src="https://via.placeholder.com/1600x600/0d9488/ffffff?text=Professional+Meeting+Space"
-          alt="Professional meeting space"
-          className="w-full h-full object-cover opacity-60"
-        />
-        <div className="absolute inset-0 bg-gray-900 opacity-50"></div>
-      </div>
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-primary-teal opacity-90"></div>
 
       {/* Content */}
       <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

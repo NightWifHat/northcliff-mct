@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import nmctLogo from '../assets/logo/nmct-logo-dark-teal.svg'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,8 +26,12 @@ const Navbar = () => {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center"
           >
-            <Link to="/" className="text-2xl font-bold text-primary-teal">
-              Northcliff MCT
+            <Link to="/" className="flex items-center" aria-label="Northcliff MCT - Go to homepage">
+              <img
+                src={nmctLogo}
+                alt="Northcliff MCT logo"
+                className="h-10 w-auto"
+              />
             </Link>
           </motion.div>
 

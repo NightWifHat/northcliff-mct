@@ -2,24 +2,6 @@ import { motion } from 'framer-motion'
 import Card from '../components/Card'
 
 const About = () => {
-  const team = [
-    {
-      name: 'Victor de Bruyn',
-      practice: 'Lindsay Keller',
-      link: 'https://www.lindsaykeller.com'
-    },
-    {
-      name: 'Lize-Marié Joubert',
-      practice: 'JW Law',
-      link: 'https://www.jw-law.co.za'
-    },
-    {
-      name: 'Kay Schröder',
-      practice: 'Werth Schröder',
-      link: 'https://www.werthschroeder.com'
-    }
-  ]
-
   const values = [
     {
       title: 'Professionalism',
@@ -102,47 +84,8 @@ const About = () => {
         </div>
       </section>
 
-      {/* Our Team Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Team</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Three experienced attorneys with a shared commitment to excellence and accessibility.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {team.map((member, index) => (
-              <Card key={index} delay={index * 0.2} className="text-center">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-3">
-                  {member.name}
-                </h3>
-                <a 
-                  href={member.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary-teal hover:text-primary-green font-medium text-lg transition-colors inline-flex items-center justify-center gap-2"
-                >
-                  {member.practice}
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                  </svg>
-                </a>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Values Section */}
-      <section className="py-20 bg-light-gray">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

@@ -47,7 +47,7 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact Info</h4>
             <div className="space-y-2 text-gray-300">
-              <p>📧 info@northcliffmct.co.za</p>
+              <p>📧 reservations@nmct.co.za</p>
               <p>📞 TBA</p>
               <p>📍 Impala Chambers<br/>177 Beyers Naude Drive, Northcliff<br/>Johannesburg, 2195</p>
             </div>

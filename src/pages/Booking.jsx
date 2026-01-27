@@ -566,7 +566,7 @@ const Booking = () => {
               <div className="space-y-3 text-sm">
                 <div className="flex items-center">
                   <span className="text-primary-teal mr-2">📧</span>
-                  <span>info@northcliffmct.co.za</span>
+                  <span>reservations@nmct.co.za</span>
                 </div>
                 <div className="flex items-center">
                   <span className="text-primary-teal mr-2">📞</span>

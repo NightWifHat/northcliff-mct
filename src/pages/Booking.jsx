@@ -24,12 +24,10 @@ const Booking = () => {
 
   const packageTypes = [
     { value: '', label: 'Select a package...', price: 0 },
-    { value: 'half-day', label: 'Half Day Sessions', fullDayPrice: null, halfDayPrice: 2250 },
-    { value: 'full-day', label: 'Full Day', fullDayPrice: 4500, halfDayPrice: null },
-    { value: 'after-hours', label: 'After Hours (per hour)', fullDayPrice: null, halfDayPrice: null, hourlyPrice: 500 },
-    { value: 'boardroom-only', label: 'Boardroom Only (12 pax)', fullDayPrice: 3000, halfDayPrice: 1500 },
-    { value: 'consultation-room', label: 'One Consultation Room (6 pax)', fullDayPrice: 2400, halfDayPrice: 1200 },
-    { value: 'boardroom-consultation', label: 'Boardroom + One Consultation Room (18 pax)', fullDayPrice: 3200, halfDayPrice: 1600 }
+    { value: 'boardroom-only', label: 'Boardroom Only (12 pax)', fullDayPrice: 4000, halfDayPrice: 3000, hourlyPrice: 800 },
+    { value: 'consultation-room', label: 'One Consultation Room (6 pax)', fullDayPrice: 3000, halfDayPrice: 1500, hourlyPrice: 500 },
+    { value: 'boardroom-consultation', label: 'Boardroom + One Consultation Room (18 pax)', fullDayPrice: 6000, halfDayPrice: 4000, hourlyPrice: 1000 },
+    { value: 'boardroom-two-consultation', label: 'Boardroom + Two Consultation Rooms (24 pax)', fullDayPrice: 7000, halfDayPrice: 5000, hourlyPrice: 1500 }
   ]
 
   const durations = [
@@ -40,7 +38,7 @@ const Booking = () => {
 
   const timeSlots = [
     { value: '', label: 'Select time...' },
-    { value: '08:00', label: '08:00 AM' },
+    { value: '08:30', label: '08:30 AM' },
     { value: '09:00', label: '09:00 AM' },
     { value: '10:00', label: '10:00 AM' },
     { value: '11:00', label: '11:00 AM' },
@@ -48,8 +46,7 @@ const Booking = () => {
     { value: '13:00', label: '01:00 PM' },
     { value: '14:00', label: '02:00 PM' },
     { value: '15:00', label: '03:00 PM' },
-    { value: '16:00', label: '04:00 PM' },
-    { value: '17:00', label: '05:00 PM' }
+    { value: '16:00', label: '04:00 PM' }
   ]
 
   // Calculate total amount based on package type and duration
@@ -544,28 +541,20 @@ const Booking = () => {
               </h3>
               <div className="space-y-3 text-sm">
                 <div className="border-b pb-2">
-                  <div className="font-medium text-gray-900">Half Day Sessions</div>
-                  <div className="text-gray-600">{formatZAR(2250, false)}</div>
-                </div>
-                <div className="border-b pb-2">
-                  <div className="font-medium text-gray-900">Full Day</div>
-                  <div className="text-gray-600">{formatZAR(4500, false)}</div>
-                </div>
-                <div className="border-b pb-2">
-                  <div className="font-medium text-gray-900">After Hours</div>
-                  <div className="text-gray-600">{formatZARHourly(500)}</div>
-                </div>
-                <div className="border-b pb-2">
                   <div className="font-medium text-gray-900">Boardroom Only (12 pax)</div>
-                  <div className="text-gray-600">{formatZAR(1500, false)} (half) / {formatZAR(3000, false)} (full)</div>
+                  <div className="text-gray-600">{formatZAR(3000, false)} (half) / {formatZAR(4000, false)} (full) / {formatZARHourly(800)}</div>
                 </div>
                 <div className="border-b pb-2">
-                  <div className="font-medium text-gray-900">Consultation Room (6 pax)</div>
-                  <div className="text-gray-600">{formatZAR(1200, false)} (half) / {formatZAR(2400, false)} (full)</div>
+                  <div className="font-medium text-gray-900">One Consultation Room (6 pax)</div>
+                  <div className="text-gray-600">{formatZAR(1500, false)} (half) / {formatZAR(3000, false)} (full) / {formatZARHourly(500)}</div>
+                </div>
+                <div className="border-b pb-2">
+                  <div className="font-medium text-gray-900">Boardroom + One Consultation (18 pax)</div>
+                  <div className="text-gray-600">{formatZAR(4000, false)} (half) / {formatZAR(6000, false)} (full) / {formatZARHourly(1000)}</div>
                 </div>
                 <div className="pb-2">
-                  <div className="font-medium text-gray-900">Boardroom + Consultation (18 pax)</div>
-                  <div className="text-gray-600">{formatZAR(1600, false)} (half) / {formatZAR(3200, false)} (full)</div>
+                  <div className="font-medium text-gray-900">Boardroom + Two Consultations (24 pax)</div>
+                  <div className="text-gray-600">{formatZAR(5000, false)} (half) / {formatZAR(7000, false)} (full) / {formatZARHourly(1500)}</div>
                 </div>
               </div>
             </Card>
@@ -585,7 +574,7 @@ const Booking = () => {
                 </div>
                 <div className="flex items-center">
                   <span className="text-primary-teal mr-2">🕐</span>
-                  <span>Mon-Fri: 8AM-6PM</span>
+                  <span>Mon-Fri: 08:30-17:00</span>
                 </div>
               </div>
             </Card>

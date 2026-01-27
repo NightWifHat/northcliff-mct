@@ -5,7 +5,7 @@ const About = () => {
   const values = [
     {
       title: 'Professionalism',
-      description: 'We maintain the highest standards in all our facilities and services, ensuring every client receives exceptional quality.',
+      description: 'We maintain high standards in our facility and as regards our services, ensuring good quality for the clients.',
       icon: '🎯'
     },
     {
@@ -40,7 +40,7 @@ const About = () => {
               About Northcliff MCT
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Northcliff MCT was born from the shared vision of three experienced attorneys who recognized the need for high-quality, affordable professional spaces.
+              Northcliff MCT was born from the shared vision of three experienced attorneys who recognised the need for high-quality, affordable professional spaces.
             </p>
           </motion.div>
         </div>
@@ -58,7 +58,7 @@ const About = () => {
             >
               <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
               <p className="text-lg text-gray-600 mb-6">
-                Northcliff MCT was born from the shared vision of three experienced attorneys who recognized the need for high-quality, affordable professional spaces.
+                Northcliff MCT was born from the shared vision of three experienced attorneys who recognised the need for high-quality, affordable professional spaces.
               </p>
               <p className="text-lg text-gray-600 mb-6">
                 After years of practicing law and witnessing colleagues struggle to find suitable venues for alternative dispute resolution, consultation, and training they decided to create the solution themselves.

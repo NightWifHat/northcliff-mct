@@ -11,51 +11,33 @@ const Gallery = () => {
   const images = [
     {
       id: 1,
-      src: 'https://via.placeholder.com/600x400/14b8a6/ffffff?text=Mediation+Room+1',
-      title: 'Main Mediation Room',
-      description: 'Our largest mediation space with natural lighting and comfortable seating for up to 8 people'
+      src: 'https://via.placeholder.com/600x400/134e4a/ffffff?text=Main+Boardroom',
+      title: 'Main Boardroom',
+      description: 'Executive boardroom with modern presentation facilities, seating up to 12 people'
     },
     {
       id: 2,
-      src: 'https://via.placeholder.com/600x400/059669/ffffff?text=Training+Hall',
-      title: 'Training Hall',
-      description: 'Modern training facility accommodating up to 24 people with state-of-the-art AV equipment'
+      src: 'https://via.placeholder.com/600x400/14b8a6/ffffff?text=Consultation+Room+1',
+      title: 'Consultation Room 1',
+      description: 'Private consultation space for confidential meetings, seating up to 6 people'
     },
     {
       id: 3,
-      src: 'https://via.placeholder.com/600x400/0d9488/ffffff?text=Consultation+Room',
-      title: 'Private Consultation Room',
-      description: 'Intimate space for confidential one-on-one meetings and consultations'
+      src: 'https://via.placeholder.com/600x400/0d9488/ffffff?text=Consultation+Room+2',
+      title: 'Consultation Room 2',
+      description: 'Second consultation room for breakout sessions, seating up to 6 people'
     },
     {
       id: 4,
-      src: 'https://via.placeholder.com/600x400/134e4a/ffffff?text=Boardroom',
-      title: 'Boardroom',
-      description: 'Executive boardroom-style setup with modern presentation facilities seating 12-18'
+      src: 'https://via.placeholder.com/600x400/059669/ffffff?text=Our+Team',
+      title: 'Our Team',
+      description: 'The Northcliff MCT team dedicated to providing professional meeting spaces'
     },
     {
       id: 5,
-      src: 'https://via.placeholder.com/600x400/14b8a6/ffffff?text=Breakout+Area',
-      title: 'Breakout Area',
-      description: 'Relaxed space for informal discussions and networking during breaks'
-    },
-    {
-      id: 6,
-      src: 'https://via.placeholder.com/600x400/059669/ffffff?text=Mediation+Room+2',
-      title: 'Secondary Mediation Room',
-      description: 'Smaller mediation space perfect for intimate sessions and family disputes'
-    },
-    {
-      id: 7,
-      src: 'https://via.placeholder.com/600x400/0d9488/ffffff?text=Kitchen+Area',
-      title: 'Kitchen & Refreshment Area',
-      description: 'Fully equipped kitchen area for catering services and refreshments'
-    },
-    {
-      id: 8,
-      src: 'https://via.placeholder.com/600x400/0f766e/ffffff?text=Parking+Area',
-      title: 'Secure Parking',
-      description: 'Safe and secure parking facilities available for all clients and visitors'
+      src: 'https://via.placeholder.com/600x400/0f766e/ffffff?text=Facility+Overview',
+      title: 'Facility Overview',
+      description: 'Located at Impala Chambers, 177 Beyers Naude Drive, Northcliff, Johannesburg'
     }
   ]
 

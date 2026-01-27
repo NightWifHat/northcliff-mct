@@ -4,51 +4,30 @@ import Card from '../components/Card'
 import { formatZAR, formatZARHourly } from '../utils/currency'
 
 const Services = () => {
-  const services = [
-    {
-      title: 'Half Day Sessions',
-      description: 'Flexible half-day booking with two convenient time slots to choose from.',
-      image: 'https://via.placeholder.com/600x400/14b8a6/ffffff?text=Half+Day',
-      sessions: [
-        { name: 'Session 1', time: '08:00 to 13:00' },
-        { name: 'Session 2', time: '13:00 to 18:00' }
-      ],
-      price: 2250
-    },
-    {
-      title: 'Full Day',
-      description: 'Complete day access from morning to evening for extended meetings and events.',
-      image: 'https://via.placeholder.com/600x400/059669/ffffff?text=Full+Day',
-      time: '08:00 to 18:00',
-      price: 4500
-    },
-    {
-      title: 'After Hours',
-      description: 'Flexible booking for evenings and Saturdays when you need space outside regular hours.',
-      image: 'https://via.placeholder.com/600x400/0d9488/ffffff?text=After+Hours',
-      note: 'Including Saturdays',
-      hourlyPrice: 500
-    }
-  ]
-
   const spaceOptions = [
     {
       title: 'Boardroom Only (12 pax)',
+      halfDayPrice: 3000,
+      fullDayPrice: 4000,
+      hourlyPrice: 800
+    },
+    {
+      title: 'One Consultation Room (6 pax)',
       halfDayPrice: 1500,
       fullDayPrice: 3000,
       hourlyPrice: 500
     },
     {
-      title: 'One Consultation Room (6 pax)',
-      halfDayPrice: 1200,
-      fullDayPrice: 2400,
-      hourlyPrice: 500
+      title: 'Boardroom + One Consultation Room (18 pax)',
+      halfDayPrice: 4000,
+      fullDayPrice: 6000,
+      hourlyPrice: 1000
     },
     {
-      title: 'Boardroom + One Consultation Room (18 pax)',
-      halfDayPrice: 1600,
-      fullDayPrice: 3200,
-      hourlyPrice: 500
+      title: 'Boardroom + Two Consultation Rooms (24 pax)',
+      halfDayPrice: 5000,
+      fullDayPrice: 7000,
+      hourlyPrice: 1500
     }
   ]
 
@@ -77,7 +56,7 @@ const Services = () => {
         </div>
       </section>
 
-      {/* Booking Options Section */}
+      {/* Space Options Section */}
       <section className="py-20 bg-light-gray">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
@@ -87,51 +66,11 @@ const Services = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">Booking Options</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">Space Options & Pricing</h2>
+            <p className="text-lg text-gray-600">
+              Operating hours: Monday to Friday, 08:30 – 17:00
+            </p>
           </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            {services.map((service, index) => (
-              <Card key={index} delay={index * 0.1} className="text-center">
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4">
-                  {service.title}
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  {service.description}
-                </p>
-                
-                {service.sessions && (
-                  <div className="mb-6 space-y-2">
-                    {service.sessions.map((session, idx) => (
-                      <div key={idx} className="bg-gray-50 rounded-lg p-3">
-                        <p className="font-semibold text-gray-900">{session.name}</p>
-                        <p className="text-sm text-gray-600">{session.time}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                
-                {service.time && (
-                  <div className="mb-6">
-                    <div className="bg-gray-50 rounded-lg p-3">
-                      <p className="font-semibold text-gray-900">{service.time}</p>
-                    </div>
-                  </div>
-                )}
-
-                {service.note && (
-                  <p className="text-sm text-gray-600 italic mb-4">{service.note}</p>
-                )}
-                
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <p className="text-sm text-gray-600 mb-2">Price</p>
-                  <p className="text-3xl font-bold text-primary-teal">
-                    {service.price ? formatZAR(service.price) : formatZARHourly(service.hourlyPrice)}
-                  </p>
-                </div>
-              </Card>
-            ))}
-          </div>
 
           {/* Space Options Table */}
           <motion.div
@@ -141,7 +80,6 @@ const Services = () => {
             viewport={{ once: true }}
             className="bg-white rounded-xl shadow-lg p-8"
           >
-            <h3 className="text-3xl font-bold text-gray-900 mb-8 text-center">Space Options</h3>
             <div className="overflow-x-auto">
               <table className="w-full">
                 <thead>

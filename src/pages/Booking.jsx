@@ -199,60 +199,40 @@ const Booking = () => {
   }
 
   const handlePaymentSuccess = async (paymentDetails) => {
-    try {
-      // Save booking to Supabase after successful payment
-      const packageType = packageTypes.find(p => p.value === formData.packageType)
-      const bookingData = {
-        booking_date: selectedDate?.toISOString().split('T')[0],
-        status: 'booked',
-        package_type: packageType?.label || formData.packageType,
-        price: calculateAmount(),
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        notes: formData.message,
-        time: formData.time,
-        duration: formData.duration,
-        payment_id: paymentDetails.id,
-        created_at: new Date().toISOString()
-      }
+    // Booking is now created inside PayPalCheckout after successful payment
+    // This handler is called after everything is complete
+    console.log('Payment and booking successful:', paymentDetails)
+  }
 
-      const { data, error } = await supabase
-        .from('bookings')
-        .insert([bookingData])
-
-      if (error) {
-        console.error('Error saving booking:', error)
-        alert('Payment successful but there was an error saving your booking. Please contact us with your payment ID: ' + paymentDetails.id)
-        return
-      }
-
-      console.log('Booking saved successfully:', data)
-      alert('Booking confirmed! You will receive a confirmation email shortly.')
-      
-      // Reset form
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        time: '',
-        packageType: '',
-        duration: '',
-        message: ''
-      })
-      setSelectedDate(null)
-      setShowPayment(false)
-      
-    } catch (error) {
-      console.error('Error processing booking:', error)
-      alert('Payment successful but there was an error saving your booking. Please contact us with your payment ID: ' + paymentDetails.id)
-    }
+  const handleBookingCreated = (bookingRecord) => {
+    // Called after booking record is successfully created in Supabase
+    console.log('Booking record created:', bookingRecord)
+    
+    // Reset form after successful booking
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      time: '',
+      packageType: '',
+      duration: '',
+      message: ''
+    })
+    setSelectedDate(null)
+    // Keep showPayment true so user sees success confirmation
   }
 
   const handlePaymentError = (error) => {
     console.error('Payment error:', error)
-    alert('Payment failed. Please try again or contact us for assistance.')
-    setShowPayment(false)
+    
+    // Handle slot unavailable case specially
+    if (error?.type === 'SLOT_UNAVAILABLE') {
+      // User will see error in PayPalCheckout, just log it
+      console.log('Slot was no longer available, refund may be needed')
+      return
+    }
+    
+    // For other errors, user can try again from PayPalCheckout UI
   }
 
   const formatDate = (date) => {
@@ -274,6 +254,7 @@ const Booking = () => {
       email: formData.email,
       phone: formData.phone,
       date: formatDate(selectedDate),
+      rawDate: selectedDate, // Raw date for slot availability check
       time: formData.time,
       packageType: packageType?.label || '',
       duration: duration?.label || '',
@@ -536,6 +517,7 @@ const Booking = () => {
                   bookingDetails={getBookingDetails()}
                   onPaymentSuccess={handlePaymentSuccess}
                   onPaymentError={handlePaymentError}
+                  onBookingCreated={handleBookingCreated}
                 />
                 
                 <div className="mt-6 text-center">

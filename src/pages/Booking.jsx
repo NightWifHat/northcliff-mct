@@ -21,6 +21,7 @@ const Booking = () => {
   const [showPayment, setShowPayment] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errors, setErrors] = useState({})
+  const [termsAccepted, setTermsAccepted] = useState(false)
 
   const packageTypes = [
     { value: '', label: 'Select a package...', price: 0 },
@@ -148,6 +149,10 @@ const Booking = () => {
 
     if (formData.packageType && formData.duration && !isDurationValid()) {
       newErrors.duration = 'Selected duration is not available for this package'
+    }
+
+    if (!termsAccepted) {
+      newErrors.terms = 'You must accept the Terms of Use to proceed'
     }
 
     return newErrors
@@ -480,11 +485,41 @@ const Booking = () => {
                       ></textarea>
                     </div>
 
+                    {/* Terms of Use Acceptance */}
+                    <div className={`p-4 rounded-lg ${errors.terms ? 'bg-red-50 border border-red-200' : 'bg-gray-50'}`}>
+                      <div className="flex items-start">
+                        <input
+                          type="checkbox"
+                          id="termsAccepted"
+                          checked={termsAccepted}
+                          onChange={(e) => {
+                            setTermsAccepted(e.target.checked)
+                            if (errors.terms) {
+                              setErrors(prev => ({ ...prev, terms: '' }))
+                            }
+                          }}
+                          className="mt-1 h-4 w-4 text-primary-teal border-gray-300 rounded focus:ring-primary-teal cursor-pointer"
+                        />
+                        <label htmlFor="termsAccepted" className="ml-3 text-sm text-gray-700 cursor-pointer">
+                          I have read and accept the{' '}
+                          <a
+                            href="/terms"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-primary-teal hover:underline font-medium"
+                          >
+                            Terms of Use
+                          </a>
+                        </label>
+                      </div>
+                      {errors.terms && <p className="text-red-500 text-sm mt-2">{errors.terms}</p>}
+                    </div>
+
                     <button
                       type="submit"
-                      disabled={isSubmitting || !selectedDate}
+                      disabled={isSubmitting || !selectedDate || !termsAccepted}
                       className={`w-full py-4 px-6 rounded-lg font-semibold text-white transition-all duration-300 ${
-                        isSubmitting || !selectedDate
+                        isSubmitting || !selectedDate || !termsAccepted
                           ? 'bg-gray-400 cursor-not-allowed'
                           : 'btn-primary'
                       }`}

@@ -56,6 +56,14 @@ const Footer = () => {
 
         <div className="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
           <p>&copy; {currentYear} Northcliff MCT. All rights reserved.</p>
+          <p className="mt-2">
+            <Link
+              to="/terms"
+              className="text-gray-400 hover:text-primary-teal transition-colors duration-200"
+            >
+              Terms of Use
+            </Link>
+          </p>
         </div>
       </div>
     </footer>

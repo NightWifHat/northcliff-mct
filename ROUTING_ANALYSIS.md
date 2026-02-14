@@ -77,7 +77,7 @@ const navigation = [
 - ✅ **Contact phone links**: `href="tel:+27..."` (functional)
 - ✅ **Contact email links**: `href="mailto:..."` (functional)
 - ✅ **Google Maps embed**: Valid Google Maps iframe
-- ✅ **PayPal SDK**: Valid PayPal script URL
+- ✅ **PayFast integration**: Redirect-based payment flow
 - ✅ **Google Fonts**: Valid font import URL
 - ✅ **Placeholder images**: Valid placeholder.com URLs
 

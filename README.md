@@ -10,7 +10,7 @@ A responsive, professional website for Northcliff MCT (Mediation Consultation Tr
 - **Interactive Elements**: Modal lightbox gallery, form validation, animations
 - **Real-time Booking System**: Supabase integration for live availability and bookings
 - **Package Selection**: Dynamic pricing based on facility package selection
-- **PayPal Integration**: Sandbox payment processing for booking confirmation
+- **PayFast Integration**: Sandbox payment processing for booking confirmation (South African payment gateway)
 - **Framer Motion Animations**: Smooth fade-in and slide-up effects
 - **React Router**: Client-side routing for seamless navigation
 
@@ -76,7 +76,6 @@ src/
 │   ├── Hero.jsx          # Homepage hero section
 │   ├── Modal.jsx         # Modal/lightbox component
 │   ├── Navbar.jsx        # Navigation bar with placeholder logo
-│   └── PayPalCheckout.jsx # PayPal payment integration
 ├── pages/
 │   ├── About.jsx         # About us page
 │   ├── Booking.jsx       # Real booking system with Supabase
@@ -98,7 +97,7 @@ src/
 - **React Router Dom** - Client-side routing
 - **Framer Motion** - Animation library
 - **Supabase** - Backend as a Service (database and auth)
-- **PayPal SDK** - Payment processing integration
+- **PayFast** - South African payment gateway integration
 - **PostCSS** - CSS processing
 - **Autoprefixer** - CSS vendor prefixing
 
@@ -133,7 +132,7 @@ src/
   - Green: Available
 - **Dynamic package selection** with conditional duration options
 - **Automatic pricing calculation** based on package and duration
-- **PayPal sandbox integration** for payment processing
+- **PayFast sandbox integration** for payment processing (South African payment gateway)
 - **Double-booking prevention** with real-time availability checks
 - **Complete booking data storage** in Supabase database
 - Form validation and error handling
@@ -179,7 +178,7 @@ Content has been updated with real information:
 
 ### Production Deployment
 Before deploying to production:
-1. **Replace PayPal sandbox client ID** with production client ID in PayPalCheckout component
+1. **Configure PayFast production credentials** (merchant_id and merchant_key) in environment variables
 2. **Replace placeholder facility images** with actual photos (founder logos already implemented)
 3. **Update remaining facility images** with real photos
 4. **Configure production Supabase** environment
@@ -202,7 +201,7 @@ phone (VARCHAR) - Client phone number
 notes (TEXT) - Additional booking notes
 time (VARCHAR) - Preferred time slot
 duration (VARCHAR) - 'full-day' or 'half-day'
-payment_id (VARCHAR) - PayPal payment ID
+payment_id (VARCHAR) - PayFast payment ID
 created_at (TIMESTAMP) - Record creation time
 updated_at (TIMESTAMP) - Last update time
 ```
@@ -225,7 +224,7 @@ The website can be deployed to any static hosting service:
 3. Build the project: `npm run build`
 4. Deploy the `dist` folder to your hosting service
 5. Configure your hosting for single-page application routing
-6. Update PayPal configuration for production payments
+6. Update PayFast configuration for production payments
 
 ## Support
 

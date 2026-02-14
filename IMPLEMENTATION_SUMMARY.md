@@ -23,10 +23,11 @@
     - `name`, `email`, `phone`, `notes`
     - `time`, `duration`, `payment_id`
   - Double-booking prevention with live availability checks
-- ✅ **Enhanced PayPal integration**:
-  - Maintained sandbox configuration for demo
-  - Booking data saved to Supabase after successful payment
-  - Error handling for payment and database operations
+- ✅ **PayFast integration**:
+  - Sandbox configuration for demo (South African payment gateway)
+  - Redirect-based payment flow with return URL handling
+  - Booking data saved to Supabase with pending status before payment
+  - TODO: Verify payment via PayFast ITN/webhook
 - ✅ **Form validation improvements**:
   - Package-specific duration validation
   - Real-time price calculation display
@@ -96,29 +97,30 @@
 
 ### Backend Integration
 - **Supabase** for real-time database operations
-- **PayPal SDK** for secure payment processing
+- **PayFast** for secure payment processing (South African payment gateway)
 - **Environment-based configuration** for easy deployment
 
 ### Data Flow
 1. User selects package and duration → Dynamic pricing calculation
 2. User selects date → Real-time availability check against Supabase
 3. User submits form → Validation and double-booking prevention
-4. Payment processing → PayPal integration
-5. Successful payment → Booking data saved to Supabase
+4. Booking created with pending status → Redirect to PayFast
+5. Successful payment → User redirected back with success status
 6. Calendar automatically updates → New booking reflected in availability
 
 ## 🚀 Deployment Ready Features
 
 ### Production Checklist
 - ✅ **Supabase integration** with proper schema and policies
-- ✅ **PayPal sandbox** integration (ready for production client ID)
+- ✅ **PayFast sandbox** integration (ready for production credentials)
 - ✅ **Environment variable** configuration
 - ✅ **Error handling** and loading states
 - ✅ **Responsive design** across all devices
 - ✅ **Professional styling** with placeholder logos
 
 ### Required for Production
-- [ ] Replace PayPal sandbox client ID with production client ID
+- [ ] Configure PayFast production credentials (VITE_PAYFAST_MERCHANT_ID, VITE_PAYFAST_MERCHANT_KEY)
+- [ ] Set up PayFast ITN webhook endpoint for payment verification
 - [ ] Replace placeholder company logos with actual logos  
 - [ ] Replace placeholder facility images with actual photos
 - [ ] Configure production Supabase environment
@@ -136,7 +138,7 @@ bookings table:
 - name, email, phone (Client details)
 - notes (Additional information)
 - time, duration (Booking specifics)
-- payment_id (PayPal transaction ID)
+- payment_id (PayFast transaction ID)
 - created_at, updated_at (Timestamps)
 ```
 

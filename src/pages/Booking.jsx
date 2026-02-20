@@ -92,11 +92,7 @@ const Booking = () => {
       return 0
     }
     
-    // Handle hourly pricing (after-hours)
-    if (packageType.hourlyPrice) {
-      return packageType.hourlyPrice
-    }
-    
+    // Return price based on selected duration
     if (duration === 'full-day' && packageType.fullDayPrice) {
       return packageType.fullDayPrice
     } else if (duration === 'half-day' && packageType.halfDayPrice) {
@@ -221,8 +217,20 @@ const Booking = () => {
   }
 
   /**
-   * Create booking record in Supabase with status = "pending"
-   * Payment will be confirmed via PayFast ITN webhook
+   * Create booking record in Supabase with status = "reserved"
+   * 
+   * We use "reserved" (not "pending") because the Supabase schema CHECK constraint
+   * only allows: 'available', 'reserved', 'booked'.
+   * 
+   * Flow:
+   *   1. User clicks "Pay Now" → booking created as "reserved"
+   *   2. User is redirected to PayFast to complete payment
+   *   3. On successful ITN callback → status updated to "booked"
+   *   4. If payment fails/is cancelled → booking should be cleaned up
+   *      (TODO: implement ITN webhook + stale reservation cleanup job)
+   *
+   * "reserved" bookings are shown as yellow on the calendar and block
+   * the date from being double-booked.
    */
   const createPendingBooking = async () => {
     const bookingDetails = getBookingDetails()
@@ -230,7 +238,7 @@ const Booking = () => {
     
     const bookingRecord = {
       booking_date: selectedDate?.toISOString().split('T')[0],
-      status: 'pending', // Will be updated to 'booked' after payment confirmation
+      status: 'reserved', // Will be updated to 'booked' after PayFast ITN confirms payment
       package_type: bookingDetails.packageType,
       price: amount,
       name: bookingDetails.name,
@@ -239,7 +247,6 @@ const Booking = () => {
       notes: bookingDetails.message || '',
       time: bookingDetails.time,
       duration: bookingDetails.duration,
-      payment_status: 'pending',
       created_at: new Date().toISOString()
     }
 
@@ -269,9 +276,10 @@ const Booking = () => {
     try {
       // Check if date is already booked
       const selectedDateString = selectedDate?.toISOString().split('T')[0]
+      // Check for any active bookings (booked or reserved) on this date
       const { data: existingBookings, error: checkError } = await supabase
         .from('bookings')
-        .select('*')
+        .select('id, status')
         .eq('booking_date', selectedDateString)
         .in('status', ['booked', 'reserved'])
 
@@ -299,17 +307,18 @@ const Booking = () => {
 
   /**
    * Handle PayFast payment redirect
-   * Creates a pending booking and submits a POST form to PayFast
+   * Creates a reserved booking and submits a POST form to PayFast
    */
   const handlePayFastPayment = async () => {
+    // Guard against double-clicks
+    if (isSubmitting) return
     setIsSubmitting(true)
     
     try {
-      // Create pending booking in Supabase
-      const booking = await createPendingBooking()
-      console.log('Pending booking created:', booking)
+      // Create reserved booking in Supabase before redirecting to PayFast
+      await createPendingBooking()
       
-      // Submit PayFast form
+      // Submit PayFast form — this navigates away from the page
       if (payfastFormRef.current) {
         payfastFormRef.current.submit()
       }

@@ -89,6 +89,7 @@ const BookingCalendar = ({ onDateSelect, selectedDate }) => {
     }
 
     // Check Supabase bookings
+    // Statuses: 'booked' (confirmed), 'reserved' (payment pending), 'available'
     return bookings[dateKey] || "available"
   }
 

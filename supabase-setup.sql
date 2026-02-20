@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS bookings (
   notes TEXT,
   time VARCHAR(10),
   duration VARCHAR(20),
-  payment_id VARCHAR(255),
+  payment_id VARCHAR(255),        -- PayFast payment ID (set after ITN confirmation)
+  payment_status VARCHAR(20),     -- 'pending', 'completed', 'cancelled' (set after ITN confirmation),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );

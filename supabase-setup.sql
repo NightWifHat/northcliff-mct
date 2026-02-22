@@ -43,9 +43,15 @@ CREATE POLICY "Allow public selects"
   TO anon, authenticated
   USING (true);
 
--- 7. Allow updates (for future ITN webhook: reserved → booked)
+-- 7. Allow updates (ITN webhook: reserved → booked)
 CREATE POLICY "Allow public updates"
   ON bookings FOR UPDATE
   TO anon, authenticated
   USING (true)
   WITH CHECK (true);
+
+-- 8. Allow deletes (ITN webhook: clean up cancelled reservations)
+CREATE POLICY "Allow public deletes"
+  ON bookings FOR DELETE
+  TO anon, authenticated
+  USING (true);

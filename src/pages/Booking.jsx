@@ -9,22 +9,30 @@ import { formatZAR, formatZARHourly } from '../utils/currency'
 /**
  * PayFast Configuration
  * 
- * SANDBOX MODE (current): Uses sandbox credentials for development
- * PRODUCTION MODE: Update merchant_id and merchant_key with live credentials
+ * Set VITE_PAYFAST_MODE in Vercel env vars:
+ *   "sandbox" = test mode (default, no real payments)
+ *   "live"    = production mode (real payments)
  * 
  * Environment variables (set in Vercel):
- * - VITE_PAYFAST_MERCHANT_ID
- * - VITE_PAYFAST_MERCHANT_KEY
- * 
- * TODO: verify payment via PayFast ITN/webhook
+ * - VITE_PAYFAST_MODE        → "sandbox" or "live"
+ * - VITE_PAYFAST_MERCHANT_ID  → your PayFast merchant ID
+ * - VITE_PAYFAST_MERCHANT_KEY → your PayFast merchant key
+ * - VITE_PAYFAST_PASSPHRASE   → your PayFast passphrase (optional, for signature)
+ * - VITE_SITE_URL             → https://nmct.co.za
  */
+const PAYFAST_MODE = import.meta.env.VITE_PAYFAST_MODE || 'sandbox'
+
 const PAYFAST_CONFIG = {
-  // Sandbox URL - change to https://www.payfast.co.za/eng/process for production
-  actionUrl: 'https://sandbox.payfast.co.za/eng/process',
-  // Placeholder credentials - replace with real credentials in production
+  // URL switches between sandbox and live based on mode
+  actionUrl: PAYFAST_MODE === 'live'
+    ? 'https://www.payfast.co.za/eng/process'
+    : 'https://sandbox.payfast.co.za/eng/process',
   merchantId: import.meta.env.VITE_PAYFAST_MERCHANT_ID || '10000100',
   merchantKey: import.meta.env.VITE_PAYFAST_MERCHANT_KEY || '46f0cd694581a',
 }
+
+// Site URL for return/cancel/notify URLs — must match your live domain
+const SITE_URL = import.meta.env.VITE_SITE_URL || 'https://nmct.co.za'
 
 const Booking = () => {
   const [searchParams] = useSearchParams()
@@ -44,6 +52,7 @@ const Booking = () => {
   const [errors, setErrors] = useState({})
   const [termsAccepted, setTermsAccepted] = useState(false)
   const [paymentStatus, setPaymentStatus] = useState(null) // 'success' | 'cancelled' | null
+  const [bookingId, setBookingId] = useState(null) // stored after createPendingBooking
   const payfastFormRef = useRef(null)
 
   // Check URL params for payment status on mount
@@ -316,7 +325,11 @@ const Booking = () => {
     
     try {
       // Create reserved booking in Supabase before redirecting to PayFast
-      await createPendingBooking()
+      const booking = await createPendingBooking()
+      setBookingId(booking?.id)
+      
+      // Small delay to let React re-render the hidden form with the booking ID
+      await new Promise(resolve => setTimeout(resolve, 100))
       
       // Submit PayFast form — this navigates away from the page
       if (payfastFormRef.current) {
@@ -329,14 +342,12 @@ const Booking = () => {
     }
   }
 
-  // Get return URLs based on current location
+  // Return/cancel/notify URLs using the configured site URL
   const getReturnUrls = () => {
-    const baseUrl = window.location.origin
     return {
-      returnUrl: `${baseUrl}/booking?payment=success`,
-      cancelUrl: `${baseUrl}/booking?payment=cancelled`,
-      // TODO: Set up a server endpoint to handle PayFast ITN notifications
-      notifyUrl: `${baseUrl}/api/payfast-notify`
+      returnUrl: `${SITE_URL}/booking?payment=success`,
+      cancelUrl: `${SITE_URL}/booking?payment=cancelled`,
+      notifyUrl: `${SITE_URL}/api/payfast-notify`
     }
   }
 
@@ -435,14 +446,16 @@ const Booking = () => {
         <input type="hidden" name="merchant_key" value={PAYFAST_CONFIG.merchantKey} />
         <input type="hidden" name="return_url" value={urls.returnUrl} />
         <input type="hidden" name="cancel_url" value={urls.cancelUrl} />
-        {/* TODO: Set up server endpoint to handle PayFast ITN notifications */}
         <input type="hidden" name="notify_url" value={urls.notifyUrl} />
+        <input type="hidden" name="m_payment_id" value={bookingId ? String(bookingId) : ''} />
         <input type="hidden" name="amount" value={amount.toFixed(2)} />
         <input type="hidden" name="item_name" value="Room Booking – Northcliff MCT" />
         <input type="hidden" name="item_description" value={`${bookingDetails.packageType} - ${bookingDetails.duration}`} />
         <input type="hidden" name="email_address" value={formData.email} />
         <input type="hidden" name="name_first" value={formData.name.split(' ')[0]} />
         <input type="hidden" name="name_last" value={formData.name.split(' ').slice(1).join(' ') || ''} />
+        <input type="hidden" name="email_confirmation" value="1" />
+        <input type="hidden" name="confirmation_address" value={formData.email} />
       </form>
 
       {/* Hero Section */}
@@ -784,8 +797,14 @@ const Booking = () => {
                         : 'btn-primary'
                     }`}
                   >
-                    {isSubmitting ? 'Redirecting to PayFast...' : 'Pay Now'}
+                    {isSubmitting ? 'Redirecting to PayFast...' : `Pay R${amount.toFixed(2)}`}
                   </button>
+
+                  {PAYFAST_MODE === 'sandbox' && (
+                    <p className="mt-3 text-xs text-center text-orange-500 font-medium">
+                      ⚠ SANDBOX MODE — No real payments will be processed
+                    </p>
+                  )}
 
                   <div className="mt-6 text-center">
                     <button

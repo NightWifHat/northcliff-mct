@@ -1,42 +1,51 @@
--- Supabase SQL setup for Northcliff MCT booking system
--- Run this in your Supabase SQL editor to create the bookings table
+-- ============================================
+-- Northcliff MCT — Bookings table setup
+-- Run this in Supabase SQL Editor (one shot)
+-- ============================================
 
-CREATE TABLE IF NOT EXISTS bookings (
-  id SERIAL PRIMARY KEY,
-  booking_date DATE NOT NULL,
-  status VARCHAR(20) NOT NULL CHECK (status IN ('available', 'reserved', 'booked')),
-  package_type TEXT NOT NULL,
-  price NUMERIC(10,2) NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL,
-  phone VARCHAR(50) NOT NULL,
-  notes TEXT,
-  time VARCHAR(10),
-  duration VARCHAR(20),
-  payment_id VARCHAR(255),        -- PayFast payment ID (set after ITN confirmation)
-  payment_status VARCHAR(20),     -- 'pending', 'completed', 'cancelled' (set after ITN confirmation),
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+-- 1. Drop existing table (removes old policies too)
+DROP TABLE IF EXISTS bookings CASCADE;
+
+-- 2. Create the bookings table
+CREATE TABLE bookings (
+  id            bigint generated always as identity primary key,
+  booking_date  date not null,
+  status        varchar(20) not null default 'reserved'
+                  check (status in ('available', 'reserved', 'booked')),
+  package_type  varchar(100),
+  price         numeric(10, 2),
+  name          varchar(200),
+  email         varchar(200),
+  phone         varchar(50),
+  notes         text default '',
+  time          varchar(50),
+  duration      varchar(50),
+  payment_id    varchar(255),       -- PayFast payment ID (set after ITN confirmation)
+  payment_status varchar(20),       -- 'pending', 'completed', 'cancelled' (set after ITN)
+  created_at    timestamptz default now()
 );
 
--- Create index for faster date queries
-CREATE INDEX IF NOT EXISTS idx_bookings_date ON bookings (booking_date);
-CREATE INDEX IF NOT EXISTS idx_bookings_status ON bookings (status);
+-- 3. Index for fast date lookups (calendar fetches all bookings)
+CREATE INDEX idx_bookings_date ON bookings (booking_date);
 
--- Enable Row Level Security (optional but recommended)
+-- 4. Enable Row Level Security
 ALTER TABLE bookings ENABLE ROW LEVEL SECURITY;
 
--- Create policy to allow read access to booking dates and status
-CREATE POLICY "Allow read access to booking availability" ON bookings
-  FOR SELECT USING (true);
+-- 5. Allow anyone to insert (booking form is public)
+CREATE POLICY "Allow public inserts"
+  ON bookings FOR INSERT
+  TO anon, authenticated
+  WITH CHECK (true);
 
--- Create policy to allow insert for new bookings
-CREATE POLICY "Allow insert for new bookings" ON bookings
-  FOR INSERT WITH CHECK (true);
+-- 6. Allow anyone to read (calendar needs to fetch statuses)
+CREATE POLICY "Allow public selects"
+  ON bookings FOR SELECT
+  TO anon, authenticated
+  USING (true);
 
--- Insert some sample data for testing (optional)
-INSERT INTO bookings (booking_date, status, package_type, price, name, email, phone, notes)
-VALUES 
-  ('2025-09-10', 'booked', 'Full Day – Entire Facility', 4000.00, 'John Doe', 'john@example.com', '+27123456789', 'Sample booking'),
-  ('2025-09-15', 'reserved', 'Half Day – Entire Facility', 2000.00, 'Jane Smith', 'jane@example.com', '+27987654321', 'Sample reservation'),
-  ('2025-09-20', 'booked', 'Big Room Only', 1500.00, 'Bob Johnson', 'bob@example.com', '+27555666777', 'Half day booking');
+-- 7. Allow updates (for future ITN webhook: reserved → booked)
+CREATE POLICY "Allow public updates"
+  ON bookings FOR UPDATE
+  TO anon, authenticated
+  USING (true)
+  WITH CHECK (true);

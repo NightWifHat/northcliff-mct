@@ -75,8 +75,8 @@ const About = () => {
               className="text-center"
             >
               <img
-                src="https://via.placeholder.com/600x400/14b8a6/ffffff?text=Our+Professional+Facility"
-                alt="Northcliff MCT professional meeting facility interior"
+                src="/images/main-boardroom.jpg"
+                alt="Northcliff MCT main boardroom"
                 className="rounded-xl shadow-lg w-full"
               />
             </motion.div>

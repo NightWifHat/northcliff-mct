@@ -7,37 +7,37 @@ import Modal from '../components/Modal'
 const Gallery = () => {
   const [selectedImage, setSelectedImage] = useState(null)
   
-  // Gallery images - placeholder images pending actual facility photographs
+  // Gallery images — real facility photographs
   const images = [
     {
       id: 1,
-      src: 'https://via.placeholder.com/600x400/134e4a/ffffff?text=Main+Boardroom',
+      src: '/images/entrance.jpg',
+      title: 'Building Entrance',
+      description: 'Impala Chambers, 177 Beyers Naude Drive, Northcliff, Johannesburg'
+    },
+    {
+      id: 2,
+      src: '/images/main-boardroom.jpg',
       title: 'Main Boardroom',
       description: 'Executive boardroom with modern presentation facilities, seating up to 12 people'
     },
     {
-      id: 2,
-      src: 'https://via.placeholder.com/600x400/14b8a6/ffffff?text=Consultation+Room+1',
-      title: 'Consultation Room 1',
+      id: 3,
+      src: '/images/consultation-room.jpg',
+      title: 'Consultation Room',
       description: 'Private consultation space for confidential meetings, seating up to 6 people'
     },
     {
-      id: 3,
-      src: 'https://via.placeholder.com/600x400/0d9488/ffffff?text=Consultation+Room+2',
-      title: 'Consultation Room 2',
-      description: 'Second consultation room for breakout sessions, seating up to 6 people'
-    },
-    {
       id: 4,
-      src: 'https://via.placeholder.com/600x400/059669/ffffff?text=Our+Team',
-      title: 'Our Team',
-      description: 'The Northcliff MCT team dedicated to providing professional meeting spaces'
+      src: '/images/boardroom-and-consultation.jpg',
+      title: 'Boardroom & Consultation Room',
+      description: 'Combined boardroom and consultation room setup, seating up to 18 people'
     },
     {
       id: 5,
-      src: 'https://via.placeholder.com/600x400/0f766e/ffffff?text=Facility+Overview',
+      src: '/images/facility-overview.jpg',
       title: 'Facility Overview',
-      description: 'Located at Impala Chambers, 177 Beyers Naude Drive, Northcliff, Johannesburg'
+      description: 'A look at our professional, well-appointed meeting spaces'
     }
   ]
 

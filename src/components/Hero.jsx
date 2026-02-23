@@ -4,7 +4,12 @@ import { Link } from 'react-router-dom'
 const Hero = () => {
   return (
     <section className="relative bg-gray-900 min-h-screen flex items-center justify-center">
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-primary-teal opacity-90"></div>
+      {/* Background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: "url('/images/entrance.jpg')" }}
+      ></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900/85 via-gray-800/80 to-primary-teal/70"></div>
 
       {/* Content */}
       <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

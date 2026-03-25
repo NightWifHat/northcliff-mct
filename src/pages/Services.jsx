@@ -85,8 +85,14 @@ const Services = () => {
                 <thead>
                   <tr className="border-b-2 border-gray-200">
                     <th className="text-left py-4 px-4 font-semibold text-gray-900">Space Type</th>
-                    <th className="text-center py-4 px-4 font-semibold text-gray-900">Half Day</th>
-                    <th className="text-center py-4 px-4 font-semibold text-gray-900">Full Day</th>
+                    <th className="text-center py-4 px-4 font-semibold text-gray-900">
+                      Half Day
+                      <div className="text-xs font-normal text-gray-500 mt-1">08:30–12:30 or 13:30–17:30</div>
+                    </th>
+                    <th className="text-center py-4 px-4 font-semibold text-gray-900">
+                      Full Day
+                      <div className="text-xs font-normal text-gray-500 mt-1">08:30–17:30</div>
+                    </th>
                     <th className="text-center py-4 px-4 font-semibold text-gray-900">Hourly</th>
                   </tr>
                 </thead>

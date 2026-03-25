@@ -58,10 +58,7 @@ const About = () => {
             >
               <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Story</h2>
               <p className="text-lg text-gray-600 mb-6">
-                Northcliff MCT was born from the shared vision of three experienced attorneys who recognised the need for high-quality, affordable professional spaces.
-              </p>
-              <p className="text-lg text-gray-600 mb-6">
-                After years of practicing law and witnessing colleagues struggle to find suitable venues for alternative dispute resolution, consultation, and training they decided to create the solution themselves.
+                After years of practicing law and witnessing colleagues struggle to find suitable venues for alternative dispute resolution, consultation, and training we decided to create the solution ourselves.
               </p>
               <p className="text-lg text-gray-600">
                 The mission is simple: provide professional spaces that are affordable and centrally located for legal and business professionals throughout Johannesburg.

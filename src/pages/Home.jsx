@@ -27,7 +27,7 @@ const Home = () => {
     },
     {
       title: 'Flexible Spaces',
-      description: 'A boardroom seating 12 to 18 and two consultation rooms seating up to 8. Space can convert into a training facility for up to 24 attendees.',
+      description: 'A boardroom seating 12 to 18 and two consultation rooms seating up to 8. The space can convert into a training facility for up to 24 attendees.',
       icon: '🪑'
     },
     {

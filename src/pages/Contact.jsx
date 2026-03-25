@@ -143,11 +143,16 @@ const Contact = () => {
                 <h2 className="text-2xl font-bold text-gray-900">Our Location</h2>
               </div>
               <div className="text-lg text-gray-700 space-y-1">
+                <p>Second Floor</p>
                 <p>Impala Chambers</p>
                 <p>177 Beyers Naude Drive</p>
                 <p>Northcliff, Johannesburg</p>
                 <p>2195</p>
-                <p className="text-sm text-gray-600 italic mt-2">(Entrance from Hockey Avenue)</p>
+                <p className="text-sm text-gray-600 italic mt-2">Entrance from Hockey Avenue</p>
+                <div className="mt-3 space-y-1 text-base">
+                  <p>📧 <a href="mailto:reservations@nmct.co.za" className="text-primary-teal hover:underline">reservations@nmct.co.za</a></p>
+                  <p>🌐 <a href="https://www.nmct.co.za" className="text-primary-teal hover:underline">www.nmct.co.za</a></p>
+                </div>
               </div>
             </Card>
           </motion.div>
@@ -326,9 +331,8 @@ const Contact = () => {
                     <div className="ml-4">
                       <h4 className="text-lg font-semibold text-gray-900">Business Hours</h4>
                       <div className="text-gray-600">
-                        <p>Monday - Friday: 8:00 AM - 6:00 PM</p>
-                        <p>Saturday: 9:00 AM - 2:00 PM</p>
-                        <p>Sunday: By appointment only</p>
+                        <p>Monday – Friday: 08:30 – 17:30</p>
+                        <p>Saturday: 09:00 – 14:00</p>
                       </div>
                     </div>
                   </div>
@@ -346,7 +350,7 @@ const Contact = () => {
                     className="flex items-center p-3 bg-primary-teal text-white rounded-lg hover:bg-primary-green transition-colors"
                   >
                     <span className="mr-3">📅</span>
-                    <span className="font-medium">Book a Room</span>
+                    <span className="font-medium">Reserve a Space</span>
                   </Link>
                   <Link
                     to="/services"

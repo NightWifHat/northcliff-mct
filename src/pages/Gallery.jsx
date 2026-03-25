@@ -248,7 +248,7 @@ const Gallery = () => {
               Ready to Experience Our Facilities?
             </h2>
             <p className="text-xl text-teal-100 mb-8 max-w-2xl mx-auto">
-              Book a tour or reserve your space today to see our professional facilities in person.
+              Book a tour or reserve your space today to experience our professional facilities in person.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import nmctLogo from '../assets/logo/nmct-logo-colour.svg'
 
 const Footer = () => {
   const currentYear = new Date().getFullYear()
@@ -18,9 +19,13 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Company Info */}
           <div>
-            <h3 className="text-2xl font-bold text-primary-teal mb-4">
-              Northcliff MCT
-            </h3>
+            <Link to="/" aria-label="Northcliff MCT - Go to homepage">
+              <img
+                src={nmctLogo}
+                alt="Northcliff MCT logo"
+                className="h-14 w-auto mb-4"
+              />
+            </Link>
             <p className="text-gray-300 mb-4">
               Professional, accessible, and affordable space for mediation, consultation, and training in Northcliff.
             </p>
@@ -47,9 +52,10 @@ const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Contact Info</h4>
             <div className="space-y-2 text-gray-300">
+              <p>🌐 <a href="https://www.nmct.co.za" className="hover:text-primary-teal transition-colors">www.nmct.co.za</a></p>
               <p>📧 reservations@nmct.co.za</p>
               <p>📞 TBA</p>
-              <p>📍 Impala Chambers<br/>177 Beyers Naude Drive, Northcliff<br/>Johannesburg, 2195</p>
+              <p>📍 Second Floor<br/>Impala Chambers<br/>177 Beyers Naude Drive, Northcliff<br/>Johannesburg, 2195<br/><span className="text-sm italic">Entrance from Hockey Avenue</span></p>
             </div>
           </div>
         </div>

@@ -48,8 +48,8 @@ const Services = () => {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Choose from our flexible booking options designed to meet your needs. All options include uncapped Wi-Fi, uninterrupted power supply, complimentary coffee, tea, and water, secure on-site parking.
             </p>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed mt-4">
-              Document printing and basic administrative assistance available upon request. 
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mt-4">
+              Document printing and basic administrative assistance available upon request.
               Refreshments and catering can be arranged with Olivia's Coffee Bake.
             </p>
           </motion.div>
@@ -68,7 +68,7 @@ const Services = () => {
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-6">Space Options & Pricing</h2>
             <p className="text-lg text-gray-600">
-              Operating hours: Monday to Friday, 08:30 – 17:00
+              Operating hours: Monday to Friday, 08:30 – 17:30
             </p>
           </motion.div>
 

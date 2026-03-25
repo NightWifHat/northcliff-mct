@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Card from '../components/Card'
 import BookingCalendar from '../components/BookingCalendar'
@@ -75,39 +75,48 @@ const Booking = () => {
 
   const durations = [
     { value: '', label: 'Select duration...' },
-    { value: 'half-day', label: 'Half Day' },
-    { value: 'full-day', label: 'Full Day' }
+    { value: 'full-day', label: 'Full day (08:30–17:30)' },
+    { value: 'half-day-1', label: 'Half day 1st session (08:30–12:30)' },
+    { value: 'half-day-2', label: 'Half day 2nd session (13:30–17:30)' },
+    { value: 'hourly', label: 'Hourly' }
   ]
 
   const timeSlots = [
     { value: '', label: 'Select time...' },
-    { value: '08:30', label: '08:30 AM' },
-    { value: '09:00', label: '09:00 AM' },
-    { value: '10:00', label: '10:00 AM' },
-    { value: '11:00', label: '11:00 AM' },
-    { value: '12:00', label: '12:00 PM' },
-    { value: '13:00', label: '01:00 PM' },
-    { value: '14:00', label: '02:00 PM' },
-    { value: '15:00', label: '03:00 PM' },
-    { value: '16:00', label: '04:00 PM' }
+    { value: '08:30', label: '08:30' },
+    { value: '09:00', label: '09:00' },
+    { value: '09:30', label: '09:30' },
+    { value: '10:00', label: '10:00' },
+    { value: '10:30', label: '10:30' },
+    { value: '11:00', label: '11:00' },
+    { value: '11:30', label: '11:30' },
+    { value: '12:00', label: '12:00' },
+    { value: '12:30', label: '12:30' },
+    { value: '13:00', label: '13:00' },
+    { value: '13:30', label: '13:30' },
+    { value: '14:00', label: '14:00' },
+    { value: '14:30', label: '14:30' },
+    { value: '15:00', label: '15:00' },
+    { value: '15:30', label: '15:30' },
+    { value: '16:00', label: '16:00' },
+    { value: '16:30', label: '16:30' },
+    { value: '17:00', label: '17:00' },
+    { value: '17:30', label: '17:30' }
   ]
 
   // Calculate total amount based on package type and duration
   const calculateAmount = () => {
     const packageType = packageTypes.find(p => p.value === formData.packageType)
     const duration = formData.duration
-    
+
     if (!packageType || !duration) {
       return 0
     }
-    
-    // Return price based on selected duration
-    if (duration === 'full-day' && packageType.fullDayPrice) {
-      return packageType.fullDayPrice
-    } else if (duration === 'half-day' && packageType.halfDayPrice) {
-      return packageType.halfDayPrice
-    }
-    
+
+    if (duration === 'full-day') return packageType.fullDayPrice || 0
+    if (duration === 'half-day-1' || duration === 'half-day-2') return packageType.halfDayPrice || 0
+    if (duration === 'hourly') return packageType.hourlyPrice || 0
+
     return 0
   }
 
@@ -115,15 +124,13 @@ const Booking = () => {
   const isDurationValid = () => {
     const packageType = packageTypes.find(p => p.value === formData.packageType)
     const duration = formData.duration
-    
+
     if (!packageType || !duration) return true
-    
-    if (duration === 'full-day') {
-      return packageType.fullDayPrice !== null
-    } else if (duration === 'half-day') {
-      return packageType.halfDayPrice !== null
-    }
-    
+
+    if (duration === 'full-day') return !!packageType.fullDayPrice
+    if (duration === 'half-day-1' || duration === 'half-day-2') return !!packageType.halfDayPrice
+    if (duration === 'hourly') return !!packageType.hourlyPrice
+
     return false
   }
 
@@ -471,8 +478,9 @@ const Booking = () => {
               Book Your Space
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Reserve your professional space at Northcliff MCT. Fill out the form below 
-              and we'll confirm your booking within 24 hours.
+              Reserve your space by contacting us at{' '}
+              <a href="mailto:reservations@nmct.co.za" className="text-primary-teal hover:underline">reservations@nmct.co.za</a>
+              , or make use of our convenient Reservation portal below.
             </p>
           </motion.div>
         </div>
@@ -635,11 +643,12 @@ const Booking = () => {
                       >
                         {durations.map(duration => {
                           const packageType = packageTypes.find(p => p.value === formData.packageType)
-                          const isAvailable = !packageType || 
-                            (duration.value === 'full-day' && packageType.fullDayPrice !== null) ||
-                            (duration.value === 'half-day' && packageType.halfDayPrice !== null) ||
-                            duration.value === ''
-                          
+                          const isAvailable = !packageType ||
+                            duration.value === '' ||
+                            (duration.value === 'full-day' && !!packageType.fullDayPrice) ||
+                            ((duration.value === 'half-day-1' || duration.value === 'half-day-2') && !!packageType.halfDayPrice) ||
+                            (duration.value === 'hourly' && !!packageType.hourlyPrice)
+
                           return (
                             <option key={duration.value} value={duration.value} disabled={!isAvailable}>
                               {duration.label} {!isAvailable ? '(Not Available)' : ''}
@@ -865,7 +874,7 @@ const Booking = () => {
                 </div>
                 <div className="flex items-center">
                   <span className="text-primary-teal mr-2">🕐</span>
-                  <span>Mon-Fri: 08:30-17:00</span>
+                  <span>Mon-Fri: 08:30–17:30</span>
                 </div>
               </div>
             </Card>
@@ -879,6 +888,11 @@ const Booking = () => {
                 <li>• Cancellation 48hrs prior</li>
                 <li>• Secure online payments</li>
                 <li>• Refreshments included</li>
+                <li className="pt-2">
+                  <Link to="/terms" className="text-primary-teal hover:underline font-medium">
+                    View Terms of Use →
+                  </Link>
+                </li>
               </ul>
             </Card>
           </div>

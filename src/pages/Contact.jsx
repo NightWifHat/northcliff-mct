@@ -319,7 +319,7 @@ const Contact = () => {
                     <div className="ml-4">
                       <h4 className="text-lg font-semibold text-gray-900">Contact Information</h4>
                       <p className="text-gray-600">Email: reservations@nmct.co.za</p>
-                      <p className="text-gray-600">Telephone: TBA</p>
+
                       <p className="text-sm text-gray-500 mt-1">We respond within 24 hours</p>
                     </div>
                   </div>

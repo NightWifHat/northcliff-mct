@@ -868,10 +868,7 @@ const Booking = () => {
                   <span className="text-primary-teal mr-2">📧</span>
                   <span>reservations@nmct.co.za</span>
                 </div>
-                <div className="flex items-center">
-                  <span className="text-primary-teal mr-2">📞</span>
-                  <span>TBA</span>
-                </div>
+
                 <div className="flex items-center">
                   <span className="text-primary-teal mr-2">🕐</span>
                   <span>Mon-Fri: 08:30–17:30</span>

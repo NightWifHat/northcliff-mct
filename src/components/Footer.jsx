@@ -54,7 +54,7 @@ const Footer = () => {
             <div className="space-y-2 text-gray-300">
               <p>🌐 <a href="https://www.nmct.co.za" className="hover:text-primary-teal transition-colors">www.nmct.co.za</a></p>
               <p>📧 reservations@nmct.co.za</p>
-              <p>📞 TBA</p>
+
               <p>📍 Second Floor<br/>Impala Chambers<br/>177 Beyers Naude Drive, Northcliff<br/>Johannesburg, 2195<br/><span className="text-sm italic">Entrance from Hockey Avenue</span></p>
             </div>
           </div>

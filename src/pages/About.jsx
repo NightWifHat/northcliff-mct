@@ -5,7 +5,7 @@ const About = () => {
   const values = [
     {
       title: 'Professionalism',
-      description: 'We maintain high standards in our facility and as regards our services, ensuring good quality for the clients.',
+      description: 'We maintain high standards in our facility and as regards our services, ensuring good quality for our clients.',
       icon: '🎯'
     },
     {

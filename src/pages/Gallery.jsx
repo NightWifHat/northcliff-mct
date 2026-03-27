@@ -126,7 +126,7 @@ const Gallery = () => {
               Our Facilities
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Take a virtual tour of our professional spaces. Click on any image to view it in full size.
+              Take a virtual tour of our professional spaces. Click on any image to view it in full size, or contact us to view in person.
             </p>
           </motion.div>
         </div>

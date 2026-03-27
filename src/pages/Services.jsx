@@ -46,7 +46,7 @@ const Services = () => {
               Our Services
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Choose from our flexible booking options designed to meet your needs. All options include uncapped Wi-Fi, uninterrupted power supply, complimentary coffee, tea, and water, secure on-site parking.
+              Choose from our flexible booking options designed to meet your needs. All options include uncapped Wi-Fi, uninterrupted power supply, complimentary coffee, tea, and water, and secure on-site parking.
             </p>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed mt-4">
               Document printing and basic administrative assistance available upon request.
